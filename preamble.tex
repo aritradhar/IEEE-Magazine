@@ -1,0 +1,131 @@
+%%%%%%%%%%%%%%%%%%%%%%
+%usenix
+%\documentclass[letterpaper,twocolumn,10pt]{article}
+%\usepackage{usenix2019,epsfig,endnotes}
+%%%%%%%%%%%%%%%%%%%%%%
+%CCS
+\documentclass[sigconf]{acmart}
+
+% remove reference format for submission
+\settopmatter{printacmref=false}
+%\settopmatter{printfolios=true}
+
+% remove copyright box for submission
+\renewcommand\footnotetextcopyrightpermission[1]{}
+
+% control headers 
+\fancyhf{} 
+%\fancyhead[C]{Anonymous submission \#56 to ACM CCS 2019} % TODO: replace 9999 with your paper number
+\fancyfoot[C]{\thepage}
+
+\setcopyright{none} % No copyright notice required for submissions
+%\acmConference[Anonymous Submission to ACM CCS 2019]{ACM Conference on Computer and Communications Security}{Due 5 February 2019}{London, UK}
+%\acmYear{2019} 
+
+%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{xcolor}
+\usepackage{graphicx,pifont}
+\usepackage{adjustbox}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{xspace}
+\usepackage{url}
+\usepackage{tikz}
+\usepackage{pifont}
+\usetikzlibrary{positioning, trees, arrows, calc}
+%\usepackage[font={small}]{caption}
+%\usepackage{enumitem}
+%\usepackage{cite}
+%\usepackage{flushend}
+%\usepackage{hyperref}
+%\usepackage{caption}
+
+\let\oldding\ding% Store old \ding in \oldding
+\renewcommand{\ding}[2][1]{\scalebox{#1}{\oldding{#2}}}% Scale \oldding via optional argument
+
+\newcommand{\zero}{\ding[1.2]{171}\xspace}
+\newcommand{\one}{\ding[1.2]{172}\xspace}
+\newcommand{\two}{\ding[1.2]{173}\xspace}
+\newcommand{\three}{\ding[1.2]{174}\xspace}
+\newcommand{\four}{\ding[1.2]{175}\xspace}
+\newcommand{\five}{\ding[1.2]{176}\xspace}
+\newcommand{\six}{\ding[1.2]{177}\xspace}
+\newcommand{\seven}{\ding[1.2]{178}\xspace}
+\newcommand{\eight}{\ding[1.2]{179}\xspace}
+\newcommand{\nine}{\ding[1.2]{180}\xspace}
+\newcommand{\ten}{\ding[1.2]{181}\xspace}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=0.3pt] (char) {$#1$};}}
+
+\newcommand{\blue}[1]{\textcolor{black}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+
+\newcommand{\figsaver}[0]{\vspace{-5pt}}
+\newcommand{\parasaver}[0]{\vspace{-2pt}}
+
+
+\newif \ifremoveall
+\removealltrue
+
+\ifremoveall
+\newcommand{\ad}[1]{\textcolor{red}{\textbf{Aritra: #1}}}
+\newcommand{\ip}[1]{\textcolor{red}{Ivan: #1}}
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+\newcommand{\todoref}{\textcolor{red}{[ref]}}
+\newcommand{\citneed}{[\textcolor{red}{cit}] }
+\fi
+
+
+\newcommand{\name}{\textsc{TrebucTee}\xspace}
+\newcommand{\tool}{\textsc{\name API}\xspace}
+\newcommand{\device}{\textsc{Device}\xspace}
+
+\newcommand{\usb}{\texttt{USB}\xspace}
+\newcommand{\tls}{\texttt{TLS}\xspace}
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%savetrees
+%\usepackage[
+%all=normal,floats=tight
+%,paragraphs=tight
+%,wordspacing=tight
+%,mathspacing=tight
+%,mathdisplays=tight
+%]{savetrees}
+%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\myparagraph}[1]{\smallskip\noindent\textbf{#1.}\xspace}
+
+%------------------------------------------------------------------------------
+%                                Space savers.
+%------------------------------------------------------------------------------
+% This mylist environment indents items, and saves less space than the above.
+\newcounter{myctr}
+\newenvironment{mylist}{\begin{list}{\arabic{myctr}.}
+{\usecounter{myctr}
+\setlength{\topsep}{1mm}\setlength{\itemsep}{0.5mm}
+\setlength{\parsep}{0.5mm}
+\setlength{\itemindent}{1mm}\setlength{\partopsep}{0mm}
+\setlength{\labelwidth}{-2mm}
+\setlength{\leftmargin}{0mm}}}{\end{list}}
+
+\newenvironment{mylist_indent}{\begin{list}{\arabic{myctr}.}
+{\usecounter{myctr}
+\setlength{\topsep}{1mm}\setlength{\itemsep}{0.5mm}
+\setlength{\parsep}{0.5mm}
+\setlength{\itemindent}{1.5mm}\setlength{\partopsep}{0mm}
+\setlength{\labelwidth}{-2mm}
+\setlength{\leftmargin}{0mm}}}{\end{list}}
+
+% Space saving List environment for itemizing.
+\newenvironment{mybullet}{\begin{list}{$\bullet$}
+{\setlength{\topsep}{1mm}\setlength{\itemsep}{0.5mm}
+\setlength{\parsep}{0.5mm}
+\setlength{\itemindent}{0mm}\setlength{\partopsep}{0mm}
+\setlength{\labelwidth}{-2mm}
+\setlength{\leftmargin}{0mm}}}{\end{list}}
