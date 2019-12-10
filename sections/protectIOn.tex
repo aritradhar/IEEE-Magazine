@@ -1,4 +1,4 @@
-\section{Secure User Interaction}
+\section{Secure User Interaction with External Hardware as Root-of-Trust}
 
 
 Web-based interfaces are very prevalent to remotely configure safety-critical systems such as remote PLCs~\cite{controlbyweb} or medical devices~\cite{medicalDevice}, and other security-sensitive applications such as online payments, e-voting, etc. The high complexity of modern operating systems, software, and hardware components has shown that computer systems largely remain vulnerable to attacks. A compromised computer threatens the integrity and the confidentiality of any interaction between the user and a remote server. It can easily alter the data exchanged between the user and the remote server, trick the user to perform unintended actions, or observe any sensitive IO data. 
@@ -11,7 +11,7 @@ Web-based interfaces are very prevalent to remotely configure safety-critical sy
 The recent introduction of trusted computing architectures like Intel's SGX has enabled secure computations and secure data storage on otherwise untrusted computing platforms. However, such architectures do not directly enable secure user interaction because IO operations are handled by the operating system. Additionally, the recent microarchitectural attacks have shown that execution environments inside enclaves, like the one provided by SGX, can be compromised as well.
 
 
-\subsection{External Hardware and Related Solutions}
+\subsection{Existing Solutions based on External Hardware and TEE}
 
 Trusted external devices are another way to realize secure IO between a user and a remote server. Transaction confirmation devices~\cite{filyanov2011uni,weigold2011secure} allow the user to review her input data on a trusted device that is physically separated from the untrusted host. These approaches suffer from poor usability, security issues due to user habituation and are only limited to simple inputs. Bump in the Ether~\cite{McCPerRei2006} and IntegriKey~\cite{IntegriKey} use external embedded devices to sign input parameters. However, such solutions do not support output integrity; hence, the attacker can execute UI manipulation attacks to trick the user into providing incorrect inputs. Trusted overlay-based approach~\cite{brandon2017trusted} uses a trusted FPGA to overlay UI elements such as a PIN entry screen on the LCD where the user can safely enter passwords. The approach has several drawbacks - i) lack of support for UI elements apart from text field, ii) there is no way for the user to distinguish attacker-rendered UI from the trusted overlaid UI, iii) lack of mouse support, and iv) lack of integration with applications such as browsers.
 
