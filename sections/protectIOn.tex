@@ -25,6 +25,36 @@ The drawbacks of the existing systems show that ensuring the integrity and confi
 
 
 
+\subsection{Requirements of Security and Functional Properties}
+\label{goals}
+
+The lack of security properties and features in the existing solutions provides the necessary security and functional requirements for a trusted path that provides IO integrity and confidentiality and is usable. We can now summarize the observations that we derived from the literature as following:
+
+\myparagraph{R1. Inter-dependency between input and output} 
+The first and second observations from the existing solutions show that the output and input security depend on each other, and they should be considered together. Otherwise, the attacker can manipulate the output to influence the user input.
+%The main lesson that we learn from the previous papers is that input and output integrity, and confidentiality cannot be considered in isolation. Rather, they are needed to be secured simultaneously as the output, and the input both influence each other.  
+
+\myparagraph{R2. Inter-dependency between all input modalities} 
+Existing web interfaces allow users to complete forms by using different modalities for the user input, namely the keyboard, the mouse, and the touchpad. The third observation shows that a secure system should protect simultaneously all user input modalities to achieve input integrity (against early-form submission and clickjacking).
+
+%If there exist multiple input sources (typically keyboard and mouse), all of them should be protected simultaneously as these input sources influence each other. For example, in a web application scenario, protecting the integrity of only the keyboard input does not provide input integrity as an attacker-controlled host can always execute an early form submission attack.
+
+\myparagraph{R3a. No cognitive load for IO integrity} 
+A system that protects IO operations should introduce minimal or no cognitive load to its users for input integrity.
+The system should guarantee the output integrity of the legitimate information necessary to complete a form and avoid asking the user to interact with an external device or monitor security indicators out-of-context.
+
+%Output integrity protection can eliminate the actions that lead to high cognitive loads to the user.  Such as using an external device to confirm every transaction, looking to a passive security indicator and confirming actions, etc. The systems that rely heavily on such security measures suffer from input errors that originate from user habituation. Moreover, such designs require user training that makes the system hard to deployment and costly.
+
+\myparagraph{R3b. User attention for IO confidentiality} Preserving the confidentiality of user inputs against a compromised host is a challenging task because the host can trick the user to reveal her inputs when the system is not active. Therefore, requiring users to perform a small action, e.g., press a key, before entering confidential inputs is a valid trade-off between usability and security.
+
+%Confidentiality requires active triggering from the user to distinguish the secure part of the screen from ensuring part of the screen if the part of the output provides integrity/confidentiality protection.
+
+\myparagraph{R4. Small trust assumptions and deployability} 
+Our goal is to provide the rich set of IO and security features with minimal trust assumptions that do not rely on a trusted OS, specialized hypervisor, or TEEs such as Intel SGX. Preferably, the solution should be easy to set up for users, i.e., plug-and-play, and integrate well with the existing infrastructure.  
+
+
+
+
 \subsection{System Overview}
 
 \begin{figure}[t]
@@ -61,7 +91,7 @@ There are many possible ways to deploy \name. One way is to assume that the \dev
 \label{fig:screenshot_1}
 \end{figure}
 
-\name is build upon the security requirements and functional properties that are described in Section~\ref{sec:problemStatement:goals}. %\name achieves IO integrity and confidentiality by leveraging an external trusted component that we call \device (refer to Figure~\ref{fig:approachOverview}). 
+\name is build upon the security requirements and functional properties that are described in Section~\ref{goals}. %\name achieves IO integrity and confidentiality by leveraging an external trusted component that we call \device (refer to Figure~\ref{fig:approachOverview}). 
 %In our implementation, \device is realized as an external, low-TCB hardware that uses off-the-shelf components and \device is easy to integrate with legacy systems - providing \emph{easy deployment}. Figure~\ref{fig:approachOverview} illustrates the system configuration. \device sits between IO peripherals and the host system. It intercepts all keyboard and mouse events. Also, it can intercept \& overlay on the display signal. 
 \device is active only when the user visits sensitive web applications that require \name security.
 Initially, the remote server signs and delivers the sensitive UI elements to the host in a format that is understandable by \device. Next, the host transfers the sensitive UI to \device, and the \device verifies the signature to prevent manipulations by the host. As seen in a running example depicted in Figure~\ref{fig:screenshot_1}, the \device then renders the UI with sensitive elements into an overlay on top of the HDMI frame received from the host. Note that the host cannot access or modify the overlay generated by the \device. Also, the overlay covers only a part of the screen, allowing the other feature-rich content on the webpage to run unmodified. Therefore, this ensures that sensitive UI elements are presented to the user as expected by the remote server -- \emph{output integrity}. For the overlay, we use QR-codes to transfer data from the host to the device because we avoid using extra software/hardware for a separate channel, and it is easy to visualize.
