@@ -22,23 +22,11 @@
 \usepackage[T1]{fontenc}
 \usepackage{xcolor}
 \usepackage{graphicx,pifont}
-\usepackage{adjustbox}
-\usepackage{subcaption}
 \usepackage{mathtools}
 \usepackage{mathrsfs}
 \usepackage{amssymb,amsmath,amsthm}
 \usepackage{xspace}
 \usepackage{url}
-\usepackage{pifont}
-\usepackage{listings}
-\usepackage{multirow, bigdelim}
-\usepackage{wasysym}
-\usepackage{array}
-\usepackage[mode=buildnew]{standalone}
-\usepackage{rotating}
-\usepackage{graphicx}
-\usepackage{adjustbox}
-\usepackage{authblk}
 
 
 %\newcommand{\yes}{\CIRCLE} 
@@ -46,19 +34,11 @@
 %\newcommand{\yesNope}{\LEFTcircle} 
 
 %commands
-\newcommand{\no}{\ding{56}}
-\newcommand{\yesNope}{\ding{111}}
-\newcommand{\yes}{\ding{52}}
-
 
 
 \usepackage[font={small}]{caption}
 %\usepackage{enumitem}
 \usepackage{hyperref}
-%\usepackage{caption}
-\newtheorem{theorem}{Theorem}
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
 
 
 %% Compacting 
@@ -73,66 +53,6 @@ all=normal,floats=tight
 %\usepackage[compact]{titlesec}
 %\usepackage{flushend}
 
-\lstset{
-  basicstyle=\ttfamily\ttfamily,
-  numbers=left, xleftmargin=2em,frame=single,framexleftmargin=1.5em,
-  %numberstyle=\tiny,
-  columns=fullflexible,
-  showstringspaces=false,
-  commentstyle=\color{gray}\upshape
-}
-
-\lstdefinelanguage{HTML}
-{
- basicstyle=\scriptsize\ttfamily\bfseries,
-  morestring=[b]",
-  morestring=[s]{>}{<},
-  morecomment=[s]{<?}{?>},
-  stringstyle=\color{black},
-  identifierstyle=\color{darkblue},
-  keywordstyle=\bfseries\color{blue},
-  backgroundcolor=\color{background},
-  morekeywords={form,input,encrypted_qr,Input, script, br}
-}
-
-\colorlet{punct}{red!70!black}
-\definecolor{background}{HTML}{EEEEEE}
-\definecolor{delim}{RGB}{20,105,176}
-\colorlet{numb}{magenta!20!black}
-
-\lstdefinelanguage{json}{
-    basicstyle=\scriptsize\bfseries\ttfamily,
-    numbers=left,
-    numberstyle=\scriptsize,
-    stepnumber=1,
-    numbersep=5pt,
-    identifierstyle=\color{black},
-    keywordstyle=\bfseries\color{blue},
-    showstringspaces=false,
-    breaklines=true,
-    frame=lines,
-    backgroundcolor=\color{background},
-    morekeywords={formId, formName, signature, nonce, ui, dim, id, type, label, text, trigger, domain, sizeH, sizeW, size_x, size_y, enable, uiGap, size, SAS, RE},
-    literate=
-     *{0}{{{\color{numb}0}}}{1}
-      {1}{{{\color{numb}1}}}{1}
-      {2}{{{\color{numb}2}}}{1}
-      {3}{{{\color{numb}3}}}{1}
-      {4}{{{\color{numb}4}}}{1}
-      {5}{{{\color{numb}5}}}{1}
-      {6}{{{\color{numb}6}}}{1}
-      {7}{{{\color{numb}7}}}{1}
-      {8}{{{\color{numb}8}}}{1}
-      {9}{{{\color{numb}9}}}{1}
-      {:}{{{\color{punct}{:}}}}{1}
-      {,}{{{\color{punct}{,}}}}{1}
-      {\{}{{{\color{delim}{\{}}}}{1}
-      {\}}{{{\color{delim}{\}}}}}{1}
-      {[}{{{\color{delim}{[}}}}{1}
-      {]}{{{\color{delim}{]}}}}{1},
-}
-
-\renewcommand\lstlistingname{Specification}
 
 \let\oldding\ding% Store old \ding in \oldding
 \renewcommand{\ding}[2][1]{\scalebox{#1}{\oldding{#2}}}% Scale \oldding via optional argument
@@ -180,30 +100,16 @@ all=normal,floats=tight
 \newcommand{\name}{\textsc{ProtectIOn}\xspace}
 \newcommand{\tool}{\name}
 \newcommand{\device}{\textsc{IOHub}\xspace}
-\newcommand{\pop}{proof-of-pointer\xspace}
-\newcommand{\Pop}{Proof-of-pointer\xspace}
 
-\newcommand{\poa}{proof-of-action\xspace}
-\newcommand{\Poa}{Proof-of-action\xspace}
-
-\newcommand{\poui}{proof-of-UI\xspace}
-\newcommand{\Poui}{Proof-of-UI\xspace}
-
-\newcommand{\server}{$\mathcal{S}$\xspace}
-\newcommand{\user}{$\mathcal{U}$\xspace}
-\newcommand{\host}{$\mathcal{H}$\xspace}
 
 \newcommand{\toolname}{\name\xspace}
 
 \newcommand{\usb}{USB\xspace}
-\newcommand{\webusb}{WebUSB\xspace}
-\newcommand{\bluetooth}{Bluetooth\xspace}
 \newcommand{\html}{HTML\xspace}
-\newcommand{\webbt}{WebBluetooth\xspace}
 \newcommand{\http}{HTTP\xspace}
 \newcommand{\https}{HTTPS\xspace}
 \newcommand{\tls}{TLS\xspace}
-\newcommand{\onSelect}{\texttt{onSelect()}\xspace}
+
 
 %\newcommand{\myparagraph}[1]{{\scshape \bfseries #1.}}
 \newcommand{\myparagraph}[1]{\noindent\textbf{#1.}}
