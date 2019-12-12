@@ -400,21 +400,476 @@ month={Jan}}
 } 
 
 
-@inproceedings{he2014shadowcrypt,
-  title={Shadowcrypt: Encrypted web applications for everyone},
-  author={He, Warren and Akhawe, Devdatta and Jain, Sumeet and Shi, Elaine and Song, Dawn},
-  booktitle={Proceedings of the 2014 ACM SIGSAC Conference on Computer and Communications Security},
-  pages={1028--1039},
-  year={2014},
-  organization={ACM}
+
+@inproceedings{liu2003performance,
+  title={Performance comparison of MPI implementations over InfiniBand, Myrinet and Quadrics},
+  author={Liu et al., Jiuxing and Chandrasekaran},
+  booktitle={SC'03},
+  year={2003},
 }
 
-@misc{mozilla_2019, title={mozilla/gecko-dev}, url={https://github.com/mozilla/gecko-dev}, journal={GitHub}, author={Mozilla}, year={2019}, month={Sep}}
+@article{ZombieLoad,
+    title = {{ZombieLoad}: Cross-Privilege-Boundary Data Sampling},
+    author = {Schwarz et al., Michael},
+    journal = {arXiv:1905.05726},
+    year = {2019},
+}
 
-@misc{chromium_2019, title={chromium/chromium}, url={https://github.com/chromium/chromium}, journal={GitHub}, author={Chromium}, year={2019}, month={Sep}}
+@inproceedings{van2019ridl,
+  title={RIDL: Rogue In-Flight Data Load},
+  author={van Schaik et al.},
+  booktitle={2019 IEEE Symposium on Security and Privacy (SP)}, 
+  year={2019},
+  month={May}
+}
 
-@misc{V8, title={V8 JavaScript Engine}, url={https://chromium.googlesource.com/v8/v8.git}, journal={Google Git}}
+@article{minkin2019fallout,
+  title={Fallout: Reading Kernel Writes From User Space},
+  author={Minkin et al., Marina},
+  journal={arXiv preprint arXiv:1905.12701},
+  year={2019}
+}
 
-@misc{spiderMonkey, title={Getting SpiderMonkey source code}, url={https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Getting_SpiderMonkey_source_code}, journal={MDN Web Docs}}
+@inproceedings{gotzfried2017cache,
+  title={Cache attacks on Intel SGX},
+  author={G{\"o}tzfried et al., Johannes},
+  booktitle={EuroSec'17},
+  year={2017},
+}
 
-@misc{picamera, title={picamera}, url={https://picamera.readthedocs.io/en/release-1.13/}, journal={picamera}}
+@inproceedings{obfscuro,
+  title={OBFSCURO: A Commodity Obfuscation Engine on Intel SGX},
+  author={Ahmad et al., A.},
+  year={2019},
+  organization={NDSS'19}
+}
+
+@inproceedings{zerotrace,
+  title={ZeroTrace: Oblivious memory primitives from Intel SGX},
+  author={Sasy et al., Sajin},
+  booktitle={NDSS'17},
+  year={2017}
+}
+
+@inproceedings{raccoon,
+  title={Raccoon: Closing Digital Side-Channels through Obfuscated Execution.},
+  author={Rane et al., Ashay},
+  booktitle={USENIX Security'15},
+  year={2015}
+}
+
+
+@article{genkin2016physical,
+  title={Physical key extraction attacks on PCs},
+  author={Genkin et al., Daniel},
+  journal={Communications of the ACM},
+  volume={59},
+  number={6},
+  year={2016},
+}
+
+@inproceedings{asyncshock,
+  title={AsyncShock: Exploiting synchronisation bugs in Intel SGX enclaves},
+  author={Weichbrodt et al., Nico},
+  booktitle={European Symposium on Research in Computer Security (ESORICS)},
+  year={2016},
+}
+
+@inproceedings {foreshadow-usenix18,
+author = {Jo Van Bulck et al.},
+title = {Foreshadow: Extracting the Keys to the Intel {SGX} Kingdom with Transient Out-of-Order Execution},
+booktitle = {USENIX Security'18},
+year = {2018}
+}
+
+%%% security indicators
+
+@inproceedings{emperor,
+  title={The emperor's new security indicators},
+  author={Schechter et al., Stuart E},
+  booktitle={IEEE SP'07}
+}
+
+@inproceedings{alice,
+  title={Alice in Warningland: A Large-Scale Field Study of Browser Security Warning Effectiveness.},
+  author={Akhawe, Devdatta and Felt, Adrienne Porter},
+  booktitle={USENIX security symposium},
+  year={2013}
+}
+
+@inproceedings{warned,
+  title={You've been warned: an empirical study of the effectiveness of web browser phishing warnings},
+  author={Egelman et al., Serge},
+  booktitle={Proceedings of the SIGCHI Conference on Human Factors in Computing Systems},
+  year={2008}
+}
+
+@inproceedings{wolf,
+  title={Crying Wolf: An Empirical Study of SSL Warning Effectiveness.},
+  author={Sunshine et al., Joshua},
+  booktitle={USENIX security symposium},
+  year={2009}
+}
+
+
+% Rollback related work
+
+@inproceedings{ariadne,
+  title={Ariadne: A minimal approach to state continuity},
+  author={Strackx, Raoul and Piessens, Frank},
+  booktitle={USENIX Security},
+  year={2016}
+}
+
+% Trusted Path related work
+
+@INPROCEEDINGS{wimpyKernel,
+	author={Z. Zhou and M. Yu and V. D. Gligor},
+	booktitle={IEEE S\&P 2014},
+	title={Dancing with Giants: Wimpy Kernels for On-Demand Isolated I/O},
+	year = {2014}
+}
+
+@INPROCEEDINGS{utp,
+	author={A. Filyanov et al.},
+	booktitle={IEEE/IFIP DSN 2011},
+	title={Uni-directional trusted path: Transaction confirmation on just one device},
+	year = {2011}
+}
+
+@INPROCEEDINGS{x86,
+	author={Z. Zhou et al.},
+	booktitle={IEEE S\&P 2012},
+	title={Building Verifiable Trusted Path on Commodity x86 Computers},
+	year = {2012}
+}
+
+@inproceedings{nie2007dynamic,
+  title={Dynamic root of trust in trusted computing},
+  author={Nie, Cong},
+  booktitle={TKK T1105290 Seminar on Network Security},
+  year={2007},
+  organization={Citeseer}
+}
+
+@inproceedings{mccune2008flicker,
+  title={Flicker: An execution infrastructure for TCB minimization},
+  author={McCune et al., Jonathan M},
+  booktitle={ACM SIGOPS Operating Systems Review},
+  year={2008}
+}
+
+
+%cuckoo attck
+
+@inproceedings{parno2008bootstrapping,
+  title={Bootstrapping Trust in a Trusted Platform},
+  author={Parno, Bryan},
+  booktitle={HotSec'08},
+  year={2008}
+}
+
+
+@article{nandMirror,
+  author    = {Sergei Skorobogatov},
+  title     = {The bumpy road towards iPhone 5c {NAND} mirroring},
+  journal   = {CoRR},
+  eprint    = {1609.04327}
+
+}
+
+@inproceedings{ice,
+  title={ICE: A passive, high-speed, state-continuity scheme},
+  author={Strackx et al., Raoul},
+  booktitle={ACM ACSAC 2014},
+	year = {2014}
+}
+
+@inproceedings{memoir,
+  title={Memoir: Practical state continuity for protected modules},
+  author={Parno et al., Bryan},
+  booktitle={S\&P 2011},
+	year = {2011}
+}
+
+@inproceedings{filyanov2011uni,
+  title={Uni-directional trusted path: Transaction confirmation on just one device},
+  author={Filyanov et al., Atanas},
+  booktitle={IEEE/IFIP DSN 2011},
+	year = {2011}
+}
+
+%sg and sgx-attestation related papers
+
+@misc{epid_attestation, title={Intel SGX: EPID Provisioning and Attestation Services}, howpublished={http://tiny.cc/6nbvbz}, journal={Qualify for Free Software - Student | Intel Software}, publisher={Intel}, author={Johnson, Simon and Intel}, year={2017}}
+
+@misc{sgxexplained,
+    author = {V. Costan and S. Devadas},
+    title = {Intel SGX Explained},
+    howpublished = {Cryptology ePrint Archive, Report 2016/086},
+    year = {2016}
+}
+
+@article{hoekstra2013using,
+  title={Using innovative instructions to create trustworthy software solutions.},
+  author={Hoekstra et al., Matthew},
+  journal={HASP@ ISCA},
+  year={2013}
+}
+
+@inproceedings{anati2013innovative,
+  title={Innovative technology for CPU based attestation and sealing},
+  author={Anati et al., Ittai},
+  booktitle={Proceedings of the 2nd international workshop on hardware and architectural support for security and privacy},
+  year={2013}
+}
+
+@inproceedings{zhang2016town,
+  title={Town crier: An authenticated data feed for smart contracts},
+  author={Zhang et al., Fan},
+  booktitle={ACM CCS 2016}
+}
+
+@inproceedings{schuster2015vc3,
+  title={VC3: Trustworthy data analytics in the cloud using SGX},
+  author={Schuster et al., Felix},
+  booktitle={S\&P'15},
+	year = {2015}
+}
+
+@misc{cryptoeprint:2018:160,
+    author = {Sinisa Matetic et al.},
+    title = {DelegaTEE: Brokered Delegation Using Trusted Execution Environments},
+    howpublished = {Cryptology ePrint Archive, Report 2018/160},
+    year = {2018}
+}
+
+@inproceedings{arnautov2016scone,
+  title={SCONE: Secure Linux Containers with Intel SGX.},
+  author={Arnautov  et al., Sergei},
+  booktitle={OSDI},
+  year={2016}
+}
+
+
+@inproceedings{tofu,
+ author = {Wendlandt  et al., Dan},
+ title = {Perspectives: Improving SSH-style Host Authentication with Multi-path Probing},
+ booktitle = {USENIX ATC'08},
+ year = {2008},
+} 
+
+
+%trustzone
+@inproceedings{zhao2014providing,
+  title={Providing root of trust for ARM TrustZone using on-chip SRAM},
+  author={Zhao  et al., Shijun},
+  booktitle={Proceedings of the 4th International Workshop on Trustworthy Embedded Devices},
+  year={2014}
+}
+
+@InProceedings{CatchingCuckoo,
+author="Fink et al., Russell A.",
+title="Catching the Cuckoo: Verifying TPM Proximity Using a Quote Timing Side-Channel",
+booktitle="Trust and Trustworthy Computing",
+year="2011"
+}
+
+@misc{ibmTPM, title={Software TPM Introduction}, howpublished={http://ibmswtpm.sourceforge.net/}, journal={IBM's Software Trusted Platform Module (TPM)}, year = {2018}}
+
+
+@misc{trousers, title={TrouSerS}, howpublished={https://sourceforge.net/projects/trousers/}, journal={IBM Corporation: The Trusted Computing Software Stack (TrouSerS) software library (2008)},  year = {2008}}
+
+
+@InProceedings{turtle,
+author="Toegl, Ronald",
+editor="Park, Jong Hyuk
+and Chen, Hsiao-Hwa
+and Atiquzzaman, Mohammed
+and Lee, Changhoon
+and Kim, Tai-hoon
+and Yeo, Sang-Soo",
+title="Tagging the Turtle: Local Attestation for Kiosk Computing",
+booktitle="Advances in Information Security and Assurance",
+year="2009"
+}
+
+@inproceedings{bates2014leveraging,
+  title={Leveraging USB to Establish Host Identity Using Commodity Devices.},
+  author={Bates et al., Adam M},
+  booktitle={NDSS 2014}
+}
+
+@inproceedings{SadeghiProperty,
+ author = {Sadeghi, Ahmad-Reza and St\"{u}ble, Christian},
+ title = {Property-based Attestation for Computing Platforms: Caring About Properties, Not Mechanisms},
+ booktitle = {Proceedings of the 2004 Workshop on New Security Paradigms},
+year = {2004}
+}
+
+@inproceedings{sgxio,
+ author = {Weiser, Samuel and Werner, Mario},
+ title = {SGXIO: Generic Trusted I/O Path for Intel SGX},
+ series = {CODASPY '17},
+year = {2017}
+}
+
+@misc{intelSGX, title={Intel SGX homepage}, howpublished={https://software.intel.com/en-us/sgx}, journal={Intel Software}, publisher={Intel}, year={2017}, month={Jun}}
+
+
+@article{Chen2018SgxPectreAL,
+  title={SgxPectre Attacks: Leaking Enclave Secrets via Speculative Execution},
+  author={Guoxing Chen and Sanchuan Chen and Yuan Xiao and Yinqian Zhang and Zhiqiang Lin and Ten H. Lai},
+  journal={CoRR},
+  year={2018}
+}
+
+@inproceedings{Lipp2018meltdown,
+ author = {Lipp et al., Moritz},
+ title = {Meltdown: Reading Kernel Memory from User Space},
+ journal = {USENIX Security'18},
+ year = 2018
+}
+
+@inproceedings{Kocher2018spectre,
+ author = {Kocher, Paul et al.},
+ title = {Spectre Attacks: Exploiting Speculative Execution},
+ booktitle = {S\&P'19},
+ year = 2019,
+}
+
+@misc{git_sgx_sprctre, title={lsds/spectre-attack-sgx}, howpublished={https://github.com/lsds/spectre-attack-sgx}, journal={GitHub}, author={arge-Scale Data and Systems (LSDS) Group}, year={2018}, month={Jan}}
+
+
+@inproceedings {sgxcache,
+	author = {Ferdinand Brasser et al.},
+	title = {Software Grand Exposure: {SGX} Cache Attacks Are Practical},
+	booktitle = {USENIX WOOT'17},
+	year = {2017}
+}
+
+@inproceedings{gotzfried2017cache,
+  title={Cache attacks on Intel SGX},
+  author={G{\"o}tzfried, Johannes and Eckert, Moritz and Schinzel, Sebastian and M{\"u}ller, Tilo},
+  booktitle={Proceedings of the 10th European Workshop on Systems Security},
+  year={2017}
+}
+
+@article{dall2018cachequote,
+  title={Cachequote: Efficiently recovering long-term secrets of SGX EPID via cache attacks},
+  author={Dall et al., Fergus},
+  journal={TCHES},
+  volume={2018},
+  number={2},
+  year={2018}
+}
+
+
+@inproceedings{moghimi2017cachezoom,
+  title={Cachezoom: How SGX amplifies the power of cache attacks},
+  author={Moghimi, Ahmad and Irazoqui, Gorka and Eisenbarth, Thomas},
+  booktitle={CHES'17},
+  year={2017},
+}
+
+@inproceedings{xu2015controlled,
+	title={Controlled-channel attacks: Deterministic side channels for untrusted operating systems},
+	author={Xu, Yuanzhong et al.},
+	booktitle={S\&P'15},
+	year={2015}
+}
+
+@inproceedings{lee2017inferring,
+	title={Inferring fine-grained control flow inside SGX enclaves with branch shadowing},
+	author={Lee, Sangho et al.},
+	booktitle={USENIX Security'17},
+	year = {2017}
+}
+
+@InProceedings{distanceBounding,
+	author={Brands, Stefan and Chaum, David},
+	title={Distance-Bounding Protocols},
+	booktitle={EUROCRYPT '93},
+	year=1993
+}
+
+@inproceedings{matetic2017rote,
+  title={ROTE: Rollback Protection for Trusted Execution.},
+  author={Matetic ET AL., Sinisa},
+  booktitle = {USENIX Security'17},
+	year = {2017}
+}
+
+@inproceedings{brenner2016securekeeper,
+  title={SecureKeeper: confidential ZooKeeper using intel SGX},
+  author={Brenner et al., Stefan},
+  booktitle={Middleware 2016},
+  year={2016},
+}
+
+@misc{ping, title={ping(8) - Linux man page},
+howpublished={https://linux.die.net/man/8/ping},
+ author={Linux}, year={2017}
+ }
+ 
+@misc{intelME, title={Getting Started with Intel Active Management Technology (AMT)},
+howpublished={https://software.intel.com/en-us/articles/getting-started-with-intel-active-management-technology-amt},
+ publisher={Intel},
+ author={O., Joseph and Intel},
+ year={2017},
+ }
+
+ @misc{intel_epid, title={Intel Enhanced Privacy ID (EPID) Security Technology}, howpublished={https://software.intel.com/en-us/articles/intel-enhanced-privacy-id-epid-security-technology}, journal={Intel� Software}, publisher={Intel}, author={Chandler and Matt and Intel}, year={2017}, month={Jul}}
+
+
+@misc{intel_monotonic_counter, title={sgx\_create\_monotonic\_counter}, howpublished={https://software.intel.com/en-us/node/709160}, journal={Intel Software}, publisher={Intel}, year={2017}, month={Oct}}
+
+@misc{intel_local_attestation, title={Local (Intra-Platform) Attestation}, howpublished={https://software.intel.com/en-us/node/702983}, year={2018}, month={May}}
+
+@misc{intel_local_attestation_1, title={Local Attestation}, howpublished={https://software.intel.com/en-us/sgx-sdk-dev-reference-local-attestation}, publisher={Intel}, year={2018}, month={May}}
+
+@misc{gdpr,
+title = {General Data Protection Regulation},
+howpublished = {http://data.europa.eu/eli/reg/2016/679/oj},
+year={2018}
+}
+
+@inproceedings{presenceAttestation,
+ author = {Zhang  et al., Zhangkai},
+ title = {Presence Attestation: The Missing Link in Dynamic Trust Bootstrapping},
+ booktitle = {CCS '17},
+year={2017}
+}
+
+
+
+@inproceedings{gandolfi2001electromagnetic,
+  title={Electromagnetic analysis: Concrete results},
+  author={Gandolfi  et al., Karine},
+  booktitle={CHES'01},
+  year={2001},
+}
+
+@inproceedings{wang2006covert,
+  title={Covert and side channels due to processor architecture},
+  author={Wang, Zhenghong and Lee, Ruby B},
+  booktitle={ACSAC'06},
+  year={2006},
+}
+
+
+@article{shamir2004acoustic,
+  title={Acoustic cryptanalysis},
+  author={Shamir, Adi and Tromer, Eran},
+  journal={presentation available from http://www. wisdom. weizmann. ac. il/~ tromer},
+  year={2004}
+}
+
+@misc{DCAP,
+  title={Supporting Third Party Attestation for Intel SGX with Intel Data Center Attestation Primitives},
+  note={\url{http://tiny.cc/oxbvbz}},
+  author={Scarlata et al., Vinnie},
+  year={2018},
+}
+
+
