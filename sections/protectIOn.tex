@@ -1,31 +1,33 @@
+
 \section*{Trusted Path}
 
 Although SGX enclaves provide a notion of \emph{secure computation}, they do not easily lend themselves to \emph{secure user interaction}. The main reason for this is that, in an architecture like SGX, enclaves communicate with I/O devices through the untrusted OS. When an enclave needs to receive user input, it is the responsibility of the OS to pass data from an input device like keyboard or mouse to the enclave. When an enclave needs to send user output, it is the responsibility of the OS to forward output data received from the enclave to a user output device like the screen. Such TEE design means that a compromised OS can trivially modify any user input and output and read any secrets that are communicated between the user and the enclave. 
 
-Such user input and output manipulation can have severe consequences in several application scenarios. For example, if a malicious OS modified user input that is provided to a financial enclave, the enclave could be tricked to perform unauthorized payments. If enclaves are used to control safety-critical system such as a medical devices or industrial systems, user input modifications may cause serious safety risks. Also any enclave that needs to be configured with a password or similar user authentication credential is difficult to implement securely in an architecture like SGX.
+User input manipulation can have severe consequences in several application scenarios. For example, if a malicious OS modified user input that is provided to a financial enclave, the enclave could be tricked to perform unauthorized payments. If enclaves are used to control safety-critical system such as a medical devices or industrial systems, user input modifications may cause serious safety risks. Also any enclave that needs to be configured with a password or similar user authentication credential is difficult to implement securely in an architecture like SGX.
 
-Such lack of secure user interaction capabilities means that SGX-style enclaves do not support \emph{trusted path}. Two types of trusted paths are possible. The first, and more common, definition of trusted path is a secure communication channel between the human user and a \emph{local} application like an enclave. The second, and perhaps less common, definition of trusted path is one that realizes a secure communication channel between the user and the remote server. In this section of the article, we... 
+Such lack of secure user interaction capabilities means that SGX-style enclaves do not support \emph{trusted path}. Depending on the application scenario, two different types of trusted paths may be desirable. The first, and more common, definition of trusted path is a secure communication channel between the human user and a \emph{local} trusted application like an enclave. The second, and perhaps less common, definition of trusted path is one that realizes a secure communication channel between the user and the remote server without using any trusted local application in between. 
+
+In this section we explain our research project called ProtectIOn~\cite{protection} that can implement both types of trusted paths as a dedicated security chip. 
 
 
 \subsubsection*{Requirements}
-\label{goals}
 
 The lack of security properties and features in the existing solutions provides the necessary security and functional requirements for a trusted path that provides IO integrity and confidentiality and is usable. 
+
+\paragraph{R3. No cognitive load for IO integrity} 
+A system that protects IO operations should introduce minimal or no cognitive load to its users for input integrity.
+The system should guarantee the output integrity of the legitimate information necessary to complete a form and avoid asking the user to interact with an external device or monitor security indicators out-of-context.
+
 
 \paragraph{R1. Inter-dependency between input and output} 
 IntegriKey~\cite{IntegriKey} use external embedded devices to sign input parameters. However, such solutions do not support output integrity; hence, the attacker can execute UI manipulation attacks to trick the user into providing incorrect inputs. Such observation shows that the output and input security depend on each other, and they should be considered together. Otherwise, the attacker can manipulate the output to influence the user input.
 %The main lesson that we learn from the previous papers is that input and output integrity, and confidentiality cannot be considered in isolation. Rather, they are needed to be secured simultaneously as the output, and the input both influence each other.  
 
+
 \paragraph{R2. Inter-dependency between all input modalities} 
 Fidelius~\cite{Fidelius} combines the previous ideas of Bump in the Ether and trusted overlay to protect keyboard inputs from a compromised browser using external devices and a JavaScript interpreter that runs inside an SGX enclave. However, not supporting mouse causes Fidelius to susceptible to early form submission attack where the attacker could maliciously submit a form when the user is still typing - violation of input integrity. Existing web interfaces allow users to complete forms by using different modalities for the user input, namely the keyboard, the mouse, and the touchpad. The observation from Fidelius secure shows that system should protect simultaneously all user input modalities to achieve input integrity (against early-form submission and clickjacking).
 
 
-\paragraph{R3a. No cognitive load for IO integrity} 
-A system that protects IO operations should introduce minimal or no cognitive load to its users for input integrity.
-The system should guarantee the output integrity of the legitimate information necessary to complete a form and avoid asking the user to interact with an external device or monitor security indicators out-of-context.
-
-
-
 \subsubsection*{Description of \name}
 
 \begin{figure}[t]
@@ -44,7 +46,7 @@ Initially, the remote server signs and delivers the sensitive UI elements to the
 
 \begin{figure*}[t]
 	\centering
-	\includegraphics[trim={0 8cm 15cm 0}, clip, width=0.6\linewidth]{overlayScreenShot_new.pdf}
+	\includegraphics[trim={0 8cm 15cm 0}, clip, width=0.7\linewidth]{overlayScreenShot_new.pdf}
 	\caption{\name's high-level approach shows that the \device generates UI overlay to protect IO integrity and confidentiality.}
 	\label{fig:screenshot_1}
 \end{figure*}
@@ -61,11 +63,12 @@ For integrity guarantees, \name uses well-known user attention focusing mechanis
 \label{fig:prototypeArch}   
 \end{figure}
 
-\subsubsection*{Prototype}
+\subsubsection*{Prototype and Deployment}
 
 Figure~\ref{fig:prototypeArch} shows our \device prototype.
 The delay in forwarding keystrokes is $170\ \mu s$ and for frames is $21.76\ ms$. This allows the \device to achieve the maximum display frame rate of $47.69$ per second (e.g., most of the movies are shot and shown in  ~24-30 fps).
 
+Deployment...
 
 
 
