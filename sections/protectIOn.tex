@@ -5,35 +5,42 @@ Although SGX enclaves provide a notion of \emph{secure computation}, they do not
 
 User input manipulation can have severe consequences in several application scenarios. For example, if a malicious OS modified user input that is provided to a financial enclave, the enclave could be tricked to perform unauthorized payments. If enclaves are used to control safety-critical system such as a medical devices or industrial systems, user input modifications may cause serious safety risks. Also any enclave that needs to be configured with a password or similar user authentication credential is difficult to implement securely in an architecture like SGX.
 
-Such lack of secure user interaction capabilities means that SGX-style enclaves do not support \emph{trusted path}. Depending on the application scenario, two different types of trusted paths may be desirable. The first, and more common, definition of trusted path is a secure communication channel between the human user and a \emph{local} trusted application like an enclave. The second, and perhaps less common, definition of trusted path is one that realizes a secure communication channel between the user and the remote server without using any trusted local application in between. 
+Such lack of secure user interaction capabilities means that SGX-style enclaves do not support \emph{trusted path}~\cite{x}. Depending on the application scenario, two different types of trusted paths may be desirable. The first, and more common, definition of trusted path is a secure communication channel between the human user and a \emph{local} trusted application like an enclave. The second, and perhaps less common, definition of trusted path is one that realizes a secure communication channel between the user and the \emph{remote} server without using any trusted local application in between. 
 
-In this section we explain our research project called ProtectIOn~\cite{protection} that can implement both types of trusted paths as a dedicated security chip. 
-
-
-\subsubsection*{Requirements}
-
-The lack of security properties and features in the existing solutions provides the necessary security and functional requirements for a trusted path that provides IO integrity and confidentiality and is usable. 
-
-\paragraph{R3. No cognitive load for IO integrity} 
-A system that protects IO operations should introduce minimal or no cognitive load to its users for input integrity.
-The system should guarantee the output integrity of the legitimate information necessary to complete a form and avoid asking the user to interact with an external device or monitor security indicators out-of-context.
+In this section we explain our solution called \textsf{ProtectIOn}~\cite{protection} that can implement both types of trusted paths as a dedicated security chip. 
 
 
-\paragraph{R1. Inter-dependency between input and output} 
-IntegriKey~\cite{IntegriKey} use external embedded devices to sign input parameters. However, such solutions do not support output integrity; hence, the attacker can execute UI manipulation attacks to trick the user into providing incorrect inputs. Such observation shows that the output and input security depend on each other, and they should be considered together. Otherwise, the attacker can manipulate the output to influence the user input.
-%The main lesson that we learn from the previous papers is that input and output integrity, and confidentiality cannot be considered in isolation. Rather, they are needed to be secured simultaneously as the output, and the input both influence each other.  
+\subsubsection*{Observations}
 
+The idea of using dedicated security token to establish a trusted path is not new and several previous research projects and commercial deployments have explored this design space. We start our discussion by explaining the main limitations of such previous solutions and then use these observations as guiding principles for the design of our solution. 
+	
+\paragraph{Transaction confirmation} 
+The first common approach to realize a trusted path to a remote server is a transaction confirmation device~\cite{x}. In such a solution, the user first completes the security-critical user interaction like a payment on the untrusted host platform, and then the user is expected to confirm his inputs (like a payment value and account) from a separate hardware device. The main problem with this approach is that the user now has to interact with two different UIs and such confirmation step is vulnerable to \emph{user habituation}, i.e., the user confirms the payment without actually verifying it. This leads us to our first observation.  
 
-\paragraph{R2. Inter-dependency between all input modalities} 
-Fidelius~\cite{Fidelius} combines the previous ideas of Bump in the Ether and trusted overlay to protect keyboard inputs from a compromised browser using external devices and a JavaScript interpreter that runs inside an SGX enclave. However, not supporting mouse causes Fidelius to susceptible to early form submission attack where the attacker could maliciously submit a form when the user is still typing - violation of input integrity. Existing web interfaces allow users to complete forms by using different modalities for the user input, namely the keyboard, the mouse, and the touchpad. The observation from Fidelius secure shows that system should protect simultaneously all user input modalities to achieve input integrity (against early-form submission and clickjacking).
+\begin{tcolorbox}
+\textbf{Observation 1:} Out-of-context security checks have high cognitive load and risk of user habituation. 
+\end{tcolorbox}
 
+\paragraph{Signed input trace}
+The next common approach is called \emph{bump-in-the-wire}~\cite{x}. Here the main idea is to use a simple hardware device such that it sits in-between the user input devices and the rest of the computing platform. Such device can, for example, sign all user input (like every keypress) and send the signed trace to the server, as is done by IntegriKey~\cite{IntegriKey}. Unfortunately, such solutions are vulnerable to attacks, where the adversary... This leads us to the next observation.
+
+\begin{tcolorbox}
+\textbf{Observation 2:} Input and output integrity cannot be considered in isolation.
+\end{tcolorbox}
+
+\paragraph{Secure overlays} 
+Fidelius~\cite{Fidelius} combines the previous ideas of Bump in the Ether and trusted overlay to protect keyboard inputs from a compromised browser using external devices and a JavaScript interpreter that runs inside an SGX enclave. However, not supporting mouse causes Fidelius to susceptible to early form submission attack where the attacker could maliciously submit a form when the user is still typing - violation of input integrity. Existing web interfaces allow users to complete forms by using different modalities for the user input, namely the keyboard, the mouse, and the touchpad. 
+
+\begin{tcolorbox}
+\textbf{Observation 3:} All user input modalities need to be protected simultaneously.
+\end{tcolorbox}
 
 \subsubsection*{Description of \name}
 
 \begin{figure}[t]
 	\centering
 	\includegraphics[trim={0 8.5cm 17cm 0}, clip, width=0.9\linewidth]{approachOverview.pdf}
-	\caption{High-level approach overview of our solution.  The \device connects the trusted IO devices and the attacker-controlled host.}
+	\caption{\textsf{ProtectIOn} architecture.}
 	\label{fig:approachOverview}\end{figure}
 
 The model is depicted in Figure~\ref{fig:approachOverview} which shows the untrusted host, the remote server, and the user IO devices. We only assume that the monitor, keyboard, mouse (in a word all the IO devices that we need to protect from the malicious host) and the \device are trusted. The \device works as a mediator between all the IO devices and the host. Note that the \device has no network capability to communicate with the server directly, rather it relies on the host and uses it as an untrusted transport. We also assume that the \device comes with preloaded certificates and keys that allow the \device to verify the signatures signed by the server and sign data such as the user input.
@@ -44,12 +51,12 @@ There are many possible ways to deploy \name. One way is to assume that the \dev
 \device is active only when the user visits sensitive web applications that require \name security.
 Initially, the remote server signs and delivers the sensitive UI elements to the host in a format that is understandable by \device. Next, the host transfers the sensitive UI to \device, and the \device verifies the signature to prevent manipulations by the host. As seen in a running example depicted in Figure~\ref{fig:screenshot_1}, the \device then renders the UI with sensitive elements into an overlay on top of the HDMI frame received from the host. Note that the host cannot access or modify the overlay generated by the \device. Also, the overlay covers only a part of the screen, allowing the other feature-rich content on the webpage to run unmodified. Therefore, this ensures that sensitive UI elements are presented to the user as expected by the remote server -- \emph{output integrity}. For the overlay, we use QR-codes to transfer data from the host to the device because we avoid using extra software/hardware for a separate channel, and it is easy to visualize.
 
-\begin{figure*}[t]
+\begin{figure}[t]
 	\centering
-	\includegraphics[trim={0 8cm 15cm 0}, clip, width=0.7\linewidth]{overlayScreenShot_new.pdf}
+	\includegraphics[trim={0 8cm 15cm 0}, clip, width=\linewidth]{overlayScreenShot_new.pdf}
 	\caption{\name's high-level approach shows that the \device generates UI overlay to protect IO integrity and confidentiality.}
 	\label{fig:screenshot_1}
-\end{figure*}
+\end{figure}
 
 When the user interacts (types or moves the pointer) with the overlay, \device does not forward any event from the keyboard or the mouse to the host. The interaction is maintained solely by \device, which renders on-screen user inputs and therefore offers a user experience that is identical to a typical one as if the \device is not present. The user click on the \emph{submit} button triggers the submission procedure, which consists of the \device signing the user inputs and sending to the server. Note that the text fields of the form and the \emph{submit} button are inside the overlay which is inaccessible by the host, hence the attacker cannot execute the early form submission or clickjacking attacks. Finally, the server verifies the signature of \device to guarantee that the host has not altered the data. Therefore, the \device ensures \emph{input integrity} for all \emph{modalities} of input.
 
