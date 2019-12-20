@@ -137,7 +137,7 @@ After the initial attestation, the device periodically checks proximity to the a
 
 \subsubsection*{Experiments}
 
-We conducted our experiments on three SGX platforms...
+We conducted our experiments on two SGX platforms and evaluate two scenarios. In one we attach the \key to one of the platform to evaluate the round trip time between the \key and an enclave running on the attached platform. This serves as the base case where no relay attack takes place. In another scenario, we connect the two SGX platforms over a 1m long Ethernet wire ro evaluate the round trip time between two enclaves running on these platforms -- simulating the relay attack.
 
 The histogram in Figure~\ref{graph:instatAttackerHisto} on the left represents the challenge-response latencies in the legitimate proximity verification. The histogram on the right shows latencies in a simulated attack (including a post-processing phase where we reduce the adversary's measured network latencies to half to accommodate the assumption of the attacker's infinitely fast network interface).
 
