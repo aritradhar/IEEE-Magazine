@@ -68,15 +68,11 @@ Finally, we note that all attacks based on leaked attestation keys (e.g., ones o
 
 \subsubsection*{\proximitee System}
 
-Our goal is to design a solution that addresses the limitations of the remote attestation Intel SGX i.e., vulnarable to the relay attack. In short, our solution should be \emph{secure} (no Trust on Fist Use (ToFU) assumption, small TCB, no online authorities) and \emph{easy to deploy} (no OS re-installation, manual configuration or pre-defined enclaves). In this section, we provide an overview of our proposed system: \proximitee.
+Our goal is to design a solution that addresses the limitations of the remote attestation Intel SGX i.e., vulnerable to the relay attack. In short, our solution should be \emph{secure} (no Trust on Fist Use (ToFU) assumption, small TCB, no online authorities) and \emph{easy to deploy} (no OS re-installation, manual configuration or pre-defined enclaves). In this section, we provide an overview of our proposed system: \proximitee.
 We propose a hardened SGX attestation scheme, called \proximitee, based on a simple embedded device that we call \key. The embedded device is attached to the target platform over a local communication interface such as USB. 
 Our main idea is to use the combination of such trusted device and \emph{proximity verification} to prevent relay attacks. In our solution, the \key device verifies the proximity of the attested enclave and after successful proximity verification it facilitates the creation of a secure channel between the remote verifier and the attested enclave. 
 
 After the initial attestation, the device periodically checks proximity to the attested enclave. The established secure channel is contingent on the physical presence of the embedded device on the target machine and it stays active only as long as the device is plugged-in. The act of detaching the device automatically revokes the attested platform without any interaction with a trusted authority. Thus, our solution enables secure \emph{offline} enrollment and revocation. 
-
-
-\paragraph{Attestation Protocol} Figure~\ref{fig:systemSetUp} illustrates the \proximitee attestation protocol that proceeds as follows:
-
 
 \begin{figure}[t]
  \centering
@@ -84,6 +80,8 @@ After the initial attestation, the device periodically checks proximity to the a
  \caption{\proximitee attestation. The remote verifier establishes a secure channel to the \key device that first attests the enclave and then verifies its proximity.}
  \label{fig:systemSetUp}
 \end{figure}
+
+Figure~\ref{fig:systemSetUp} illustrates the \proximitee attestation protocol that proceeds as follows:
 
 \begin{enumerate}
   \item[\one] The remote verifier establishes a secure channel (e.g., TLS) to the certified \key. An assisting but untrusted user-space application facilitates the connection on the target platform acting as a transport channel between the remote verifier and the \key (and later also the enclave). As part of this first step, the remote verifier specifies which enclave should be executed.
@@ -94,9 +92,7 @@ After the initial attestation, the device periodically checks proximity to the a
 
   \item[\four] \key establishes a secure channel (e.g., TLS) to the enclave using that public key.
 
-  \item[\five] \key performs a distance-bounding protocol that consists of $n$ rounds, where each round is formed by steps \five to \eight.
-  %(see Figure~\ref{fig:challengeResponse}).
-  At the beginning of each round \key generates a random challenge $r$ and sends it to the enclave over the TLS channel.
+  \item[\five] \key performs a distance-bounding protocol that consists of $n$ rounds, where each round is formed by steps \five to \eight. At the beginning of each round \key generates a random challenge $r$ and sends it to the enclave over the TLS channel.
 
   \item[\six] The enclave increments the received challenge by one $(r+1)$.
 
@@ -108,6 +104,10 @@ After the initial attestation, the device periodically checks proximity to the a
 \end{enumerate}
 
 
+\subsubsection*{Experiments}
+
+We conducted our experiments on two SGX platforms and evaluate two scenarios. In one we attach the \key to one of the platform to evaluate the round trip time between the \key and an enclave running on the attached platform. This serves as the base case where no relay attack takes place. In another scenario, we connect the two SGX platforms over a 1m long Ethernet wire ro evaluate the round trip time between two enclaves running on these platforms -- simulating the relay attack.
+
 \begin{figure}[t]
   \centering
     \includegraphics[trim={0 13.4cm 0 0},
@@ -115,11 +115,6 @@ After the initial attestation, the device periodically checks proximity to the a
     \caption{Latency distributions for legitimate challenge-response rounds and simulated relay attack.}
     \label{graph:instatAttackerHisto}
 \end{figure}
-
-
-\subsubsection*{Experiments}
-
-We conducted our experiments on two SGX platforms and evaluate two scenarios. In one we attach the \key to one of the platform to evaluate the round trip time between the \key and an enclave running on the attached platform. This serves as the base case where no relay attack takes place. In another scenario, we connect the two SGX platforms over a 1m long Ethernet wire ro evaluate the round trip time between two enclaves running on these platforms -- simulating the relay attack.
 
 The histogram in Figure~\ref{graph:instatAttackerHisto} on the left represents the challenge-response latencies in the legitimate proximity verification. The histogram on the right shows latencies in a simulated attack (including a post-processing phase where we reduce the adversary's measured network latencies to half to accommodate the assumption of the attacker's infinitely fast network interface).
 

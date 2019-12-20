@@ -1,13 +1,5 @@
 \section*{Dedicated Security Chips}
 
-\begin{figure}[t]
-	\centering
-	\includegraphics[scale=0.7]{chips.pdf}
-	\caption{Dedicated security chips: Google Titan and Apple T2.}
-\label{fig:prototype}   
-\end{figure}
-
-
 Major computing platform providers have recently started to enhance their platforms with new types of dedicated security chips. We look at two examples of this emerging trend: Google’s Titan and Apple’s T2 security chips.
 
 \subsubsection*{Google Titan}
@@ -16,8 +8,15 @@ Titan~\cite{titan} is a security chip implemented as a low-power microcontroller
 
  One of the main functionalities that Titan implements is secure boot. When the server machine is powered up, Titan executes code, known as boot ROM, from its embedded read-only memory. This code is immutable and thus implicitly trusted. The boot ROM code loads Titan’s firmware from the embedded flash memory and verifies its integrity using a digital signature. Once Titan’s own firmware is securely verified and running, it can verify the boot process of its host. Titan blocks PCH’s access to the firmware flash until it has cryptographically verified the content of the flash and then it releases the lock and allows the verified boot firmware to configure the machine and load the boot loader, which subsequently verifies and loads the OS. Such iterative process allows precise control over which version of the system software is booted. 
 
+\begin{figure}[t]
+	\centering
+	\includegraphics[scale=0.7]{chips.pdf}
+	\caption{Dedicated security chips: Google Titan and Apple T2.}
+\label{fig:prototype}   
+\end{figure}
+
  
- \subsubsection*{Apple T2}
+\subsubsection*{Apple T2}
  
  Apple’s latest laptops and desktops come with an integrated security chip called T2~\cite{t2}. Similar to Titan, also T2 enables secure boot. When the machine with T2 chip is turned on, the T2 chip executes code from its read-only memory. This code cryptographically verifies the next step of the T2’s own boot process. Once T2 is fully running it can verify the UEFI firmware which will in turn ensure that only authorized kernel will be booted on the host CPU.
 
@@ -31,15 +30,17 @@ Both Titand and T2 implement secure boot. Secure boot is also a good example of 
 In SGX, and in other similar enclave architectures, enclaves are constructed by the untrusted OS. The construction process of the enclave (i.e., the sequence of setup instructions and their parameters) is recorded by the CPU and can be later communicated to an external verifier using the built-in attestation mechanism. This ensures that secrets will be provisioned only to correctly constructed enclave and thus the OS cannot access those secrets. Thus, SGX enclaves are protected from the OS, but they cannot exist without it. A direct implication of such TEE design is that enclaves cannot verify the integrity of the booted OS. 
 
 As enclaves cannot implement all the needed security services, some platform providers have decided to add dedicated security chips, like Titan and T2, to implement the missing functionality. As noted on Textbox 1, there are also other processor-based TEE architectures like ARM TrustZone that are better suited for secure boot.
-
+%
 Disconnecting the microphones from the main CPU is another example of a security feature that, obviously, cannot be implemented using enclaves.
   
-  
-\begin{tcolorbox}
-\textbf{ARM TrustZone:} ARM TrustZone is a processor-based TEE architecture that is commonly used on mobile devices such as smartphones. The main idea of TrustZone is to implement two separate execution modes for the same main CPU. All untrusted software, like the OS and third-party apps, are executed in the normal world mode, while applications that need protection run in a separate execution mode called secure world. The processor and other system components like memory controllers ensure that any process in the normal world cannot access the secure world applications’s memory, and thus modify their execution or read their secrets.
 
-The TEE design of ARM TrustZone is better suited for the implementation of secure boot~\cite{arbaugh1997secure}. A mobile device can be configured such that when the device is powered up the main CPU starts executing implicitly trusted code that is loaded from a predefined read-only memory location in the secure world mode. This code can then cryptographically verify the normal world boot loader before the CPU starts executing the main boot sequence in the normal world mode. Many current smartphone manufacturers implement such secure boot sequence.
-\end{tcolorbox}
+\begin{figure}
+	\begin{tcolorbox}
+	\textbf{Textbox 1:} ARM TrustZone is a processor-based TEE architecture that is commonly used on mobile devices such as smartphones. The main idea of TrustZone is to implement two separate execution modes for the same main CPU. All untrusted software, like the OS and third-party apps, are executed in the normal world mode, while applications that need protection run in a separate execution mode called secure world. The processor and other system components like memory controllers ensure that any process in the normal world cannot access the secure world applications’s memory, and thus modify their execution or read their secrets.
+
+	The TEE design of ARM TrustZone is better suited for the implementation of secure boot~\cite{arbaugh1997secure}. A mobile device can be configured such that when the device is powered up the main CPU starts executing implicitly trusted code that is loaded from a predefined read-only memory location in the secure world mode. This code can then cryptographically verify the normal world boot loader before the CPU starts executing the main boot sequence in the normal world mode. Many current smartphone manufacturers implement such secure boot sequence.
+	\end{tcolorbox}
+\end{figure}  
 
 
 \subsubsection*{Security Weaknesses}
