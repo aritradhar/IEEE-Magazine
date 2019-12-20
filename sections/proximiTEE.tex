@@ -81,8 +81,7 @@ Because SGX enclaves are programmable, it becomes possible to implement proximit
 
 The \proximitee attestation protocol that proceeds as follows: \one The remote verifier establishes a secure channel, like TLS connection to \key. \two The untrusted application creates and starts the attestation target enclave. \three The \key device performs the standard remote attestation to verify the code configuration of the enclave and during the attestsation learns the public key of the attested enclave. \four After that \key establishes a secure channel to the enclave using that public key. \five \key performs a distance-bounding protocol that consists of $n$ rounds, where each round is formed by steps \five to \eight. At the beginning of each round \key generates a random challenge and sends it to the enclave over the TLS channel. \six The enclave increments the received challenge by one and in \seven sends the response back to the \key that in \eight verifies that the response value is as expected and checks if the latency of the response is below a threshold. Successful proximity verification requires that the latency is below the threshold for sufficiently many responses. \nine If proximity verification is successful, the \key notifies the remote verifier over the TLS channel (constructed in step \one). The verifier starts using the \key TLS channel to send messages to the enclave.
 
-\subsubsection*{Experiments}
-
+\paragraph{Security evaluation}
 To evaluate the security of \proximitee we against a strong adversary, we connected two SGX platforms over a 1-meter long Ethernet wire and simulated an adversary who is able to perform all protocol computation instantaneously. We measured both the challenge-response latencies in the legitimate proximity verification and the latencies of the simulated attack. 
 
 \begin{figure}[t]
