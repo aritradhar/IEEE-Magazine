@@ -8,7 +8,7 @@ In many applications, secure computation alone is not useful, unless it is possi
 \subsubsection*{Relay Attacks}
 
 \begin{figure}[t]
-	\centering	\includegraphics[trim={0cm 9cm 15.8cm 0},clip,width=0.9\linewidth]{relayAttack2.pdf}
+	\centering	\includegraphics[trim={0cm 9cm 15.8cm 0},clip,width=0.8\linewidth]{relayAttack2.pdf}
 	\caption{Attestation relay attack.}
 	\label{fig:SystemModel}
 \end{figure}
@@ -63,64 +63,40 @@ Another benefit of relay attacks is that it may enable privilege escalation. In 
 
 The third, and perhaps the most subtle, implication of relay is that it can also enable software-based side-channel attacks that would not be otherwise possible due to timing of certain events (Case(A) in Figure~\ref{fig:relayTree}). One such example is a scenario, where, at the time of attestation and secret provisioning, the enclave is hardened against all known digital side-channel attacks (e.g., using tools like Raccoon~\cite{raccoon}). After secret provisioning, the OS compromise is detected and cleaned. Later, a new side-channel attack vector (that is not prevented by the used tools) is discovered. If the adversary performed redirection and the secret was provisioned to the attacker's machine, the new side channel is exploitable. Without the relay, the attack is not possible.
 
-Finally, we note that all attacks based on leaked attestation keys (e.g., ones obtained through the Foreshadow attack~\cite{foreshadow-usenix18}) are independent of relaying. If the adversary has obtained a valid and non-revoked attestation key, he can emulate an SGX processor on the target platform.
+We note that all attacks based on leaked attestation keys (e.g., ones obtained through the Foreshadow attack~\cite{foreshadow-usenix18}) are independent of relaying. If the adversary has obtained a valid and non-revoked attestation key, he can emulate an SGX processor on the target platform and steal any secrets that are provisioned to it.
 
 
 \subsubsection*{\proximitee System}
 
-Our goal is to design a solution that addresses the limitations of the remote attestation Intel SGX i.e., vulnerable to the relay attack. In short, our solution should be \emph{secure} (no Trust on Fist Use (ToFU) assumption, small TCB, no online authorities) and \emph{easy to deploy} (no OS re-installation, manual configuration or pre-defined enclaves). In this section, we provide an overview of our proposed system: \proximitee.
-We propose a hardened SGX attestation scheme, called \proximitee, based on a simple embedded device that we call \key. The embedded device is attached to the target platform over a local communication interface such as USB. 
-Our main idea is to use the combination of such trusted device and \emph{proximity verification} to prevent relay attacks. In our solution, the \key device verifies the proximity of the attested enclave and after successful proximity verification it facilitates the creation of a secure channel between the remote verifier and the attested enclave. 
+Parno identified relay attacks more than a decade ago and at the same time suggested a solution: \emph{proximity verification}. The main idea was to verify that the attested CPU is in the proximity of the verifier which should prevent attestation re-direction to another remote platform. Although this idea sounds simple to realize, the research efforts that followed failed to implement secure proximity verification~\cite{x}. The main reason the failure was that TPM, the secure element that was commonly available at the time, supports only fixed identification operations like digital signatures. Several experiments verified that these operations were too slow for secure proximity verification implementation. TPM signatures may take up to one second which allows the re-directed attestation request to travel a long distance.
 
-After the initial attestation, the device periodically checks proximity to the attested enclave. The established secure channel is contingent on the physical presence of the embedded device on the target machine and it stays active only as long as the device is plugged-in. The act of detaching the device automatically revokes the attested platform without any interaction with a trusted authority. Thus, our solution enables secure \emph{offline} enrollment and revocation. 
+Because SGX enclaves are programmable, it becomes possible to implement proximity verification protocols that are based on very simple operations like \texttt{XOR} that enable very fast challenge-response rounds. Based on this observation, we designed a hardened SGX attestation scheme, called \proximitee, that is illustrated in Figure~\ref{fig:proximitee}. Our solution uses a simple embedded device that we call \key. The embedded device is attached to the target platform over a local communication interface such as USB. The \key device verifies the proximity of the attested enclave and after successful proximity verification it facilitates the creation of a secure channel between the remote verifier and the attested enclave. 
 
 \begin{figure}[t]
  \centering
   \includegraphics[trim={0 8.7cm 13.2cm 0},clip,width=\linewidth]{proximiteeMain.pdf}
- \caption{\proximitee attestation. The remote verifier establishes a secure channel to the \key device that first attests the enclave and then verifies its proximity.}
- \label{fig:systemSetUp}
+ \caption{\proximitee system. The remote verifier establishes a secure channel to the \key device that first attests the enclave and then verifies its proximity.}
+ \label{fig:proximitee}
 \end{figure}
 
-Figure~\ref{fig:systemSetUp} illustrates the \proximitee attestation protocol that proceeds as follows:
-
-\begin{enumerate}
-  \item[\one] The remote verifier establishes a secure channel (e.g., TLS) to the certified \key. An assisting but untrusted user-space application facilitates the connection on the target platform acting as a transport channel between the remote verifier and the \key (and later also the enclave). As part of this first step, the remote verifier specifies which enclave should be executed.
-
-  \item[\two] The untrusted application creates and starts the attestation target enclave.
-
-  \item[\three] \key performs the standard remote attestation to verify the code configuration of the enclave with the help of the Intel Attestation Service (IAS) Server. In the attestation protocol, the device learns the public key of the attested enclave.
-
-  \item[\four] \key establishes a secure channel (e.g., TLS) to the enclave using that public key.
-
-  \item[\five] \key performs a distance-bounding protocol that consists of $n$ rounds, where each round is formed by steps \five to \eight. At the beginning of each round \key generates a random challenge $r$ and sends it to the enclave over the TLS channel.
-
-  \item[\six] The enclave increments the received challenge by one $(r+1)$.
-
-  \item[\seven] The enclave sends a response ($r+1$) back to the \key over the TLS channel.
-
-  \item[\eight] \key verifies that the response value is as expected (i.e., $r+1$) and checks if the latency of the response is below a threshold (\proximitee). Successful proximity verification requires that the latency is below the threshold for at least $k \times n$ responses, where $k \in (0, 1]$ is a percentage of the total number of responses $n$.
-
-  \item[\nine] If proximity verification is successful, the \key notifies the remote verifier over the TLS channel (constructed in step \one). The verifier starts using the \key TLS channel to send messages to the enclave.
-\end{enumerate}
-
+The \proximitee attestation protocol that proceeds as follows: \one The remote verifier establishes a secure channel, like TLS connection to \key. \two The untrusted application creates and starts the attestation target enclave. \three The \key device performs the standard remote attestation to verify the code configuration of the enclave and during the attestsation learns the public key of the attested enclave. \four After that \key establishes a secure channel to the enclave using that public key. \five \key performs a distance-bounding protocol that consists of $n$ rounds, where each round is formed by steps \five to \eight. At the beginning of each round \key generates a random challenge and sends it to the enclave over the TLS channel. \six The enclave increments the received challenge by one and in \seven sends the response back to the \key that in \eight verifies that the response value is as expected and checks if the latency of the response is below a threshold. Successful proximity verification requires that the latency is below the threshold for sufficiently many responses. \nine If proximity verification is successful, the \key notifies the remote verifier over the TLS channel (constructed in step \one). The verifier starts using the \key TLS channel to send messages to the enclave.
 
 \subsubsection*{Experiments}
 
-We conducted our experiments on two SGX platforms and evaluate two scenarios. In one we attach the \key to one of the platform to evaluate the round trip time between the \key and an enclave running on the attached platform. This serves as the base case where no relay attack takes place. In another scenario, we connect the two SGX platforms over a 1m long Ethernet wire ro evaluate the round trip time between two enclaves running on these platforms -- simulating the relay attack.
+To evaluate the security of \proximitee we against a strong adversary, we connected two SGX platforms over a 1-meter long Ethernet wire and simulated an adversary who is able to perform all protocol computation instantaneously. We measured both the challenge-response latencies in the legitimate proximity verification and the latencies of the simulated attack. 
 
 \begin{figure}[t]
   \centering
     \includegraphics[trim={0 13.4cm 0 0},
     clip,width=\linewidth]{histo.pdf} 
     \caption{Latency distributions for legitimate challenge-response rounds and simulated relay attack.}
-    \label{graph:instatAttackerHisto}
+    \label{graph:histogram}
 \end{figure}
 
-The histogram in Figure~\ref{graph:instatAttackerHisto} on the left represents the challenge-response latencies in the legitimate proximity verification. The histogram on the right shows latencies in a simulated attack (including a post-processing phase where we reduce the adversary's measured network latencies to half to accommodate the assumption of the attacker's infinitely fast network interface).
 
-As can be seen from Figure~\ref{graph:instatAttackerHisto}, the vast majority of the benign challenge-responses take from $145$ to $250 \mu s$. The vast majority of the round-trip times in the simulated attack take from $200$ to $750$ $\mu s$. Hence, the average delay of our simulated adversary is only $80 \mu s$. To put this into perspective, even the highly-optimized network connections between major data centers in the same region exhibit latencies from one millisecond upwards which is one order of magnitude more than in our simulated setup.
+Figure~\ref{graph:histogram} shows our results. The vast majority of the benign challenge-responses take from $145$ to $250 \mu s$, while the round-trip times in the simulated attack range from $200$ to $750$ $\mu s$. The average delay of our simulated adversary is only $80 \mu s$. To put this into perspective, even the highly-optimized network connections between major data centers in the same region exhibit latencies from one millisecond upwards which is one order of magnitude more than in our simulated setup. Our analysis shows that it is possible to find protocol parameters where relay attacks can be detected with very high probability and legitimate attestations fail with very low probability.costna
 
-We simulate a powerful relay-attack adversary that is connected to the target platform with fast network connection. To consider the best case for the adversary, we make several assumptions in his favor. For example, we assume that he can instantly perform all computations needed to participate in the proximity verification protocol. However, he cannot break cryptographic hardness assumptions. We define the adversary's success as the event in which proximity verification succeeds with an enclave that resides on the attacker's platform and denote the probability of such event $P_{adv}$. We define the legitimate success as the event in which proximity verification succeeds with an enclave that resides in the target platform and denote its probability $P_{legit}$. We saw that it is possible to find parameters ($n=50$, $k=0.3$ and \proximitee$=186 \mu s$) that make proximity verification very secure ($P_{adv}=3.55\times 10^{-34}$) and reliable ($P_{legit}=0.999999977$).
+%We simulate a powerful relay-attack adversary that is connected to the target platform with fast network connection. To consider the best case for the adversary, we make several assumptions in his favor. For example, we assume that he can instantly perform all computations needed to participate in the proximity verification protocol. However, he cannot break cryptographic hardness assumptions. We define the adversary's success as the event in which proximity verification succeeds with an enclave that resides on the attacker's platform and denote the probability of such event $P_{adv}$. We define the legitimate success as the event in which proximity verification succeeds with an enclave that resides in the target platform and denote its probability $P_{legit}$. We saw that it is possible to find parameters ($n=50$, $k=0.3$ and \proximitee$=186 \mu s$) that make proximity verification very secure ($P_{adv}=3.55\times 10^{-34}$) and reliable ($P_{legit}=0.999999977$).
 
 
 
