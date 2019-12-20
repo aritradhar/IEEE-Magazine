@@ -30,22 +30,19 @@ sibling distance=12em]]
     child { node[neutral, yshift=13pt] (app) {Side-Channels \\ on application enclave}
       child { node[neutral, yshift=12pt] (soft) {Software/digital}
 		child { node[solved, yshift=-4pt] (pe) {Privilege\\ escalation}}      
-        child { node[not, right=1.5em of pe] (a) {Case (A):\\Complement of Case (B)}}
-        child { node[solved, right=1.5em of a, yshift=-10pt] {Case (B):\\
-            \begin{tabular}{rl}
-                Target platform:& secure\\
-                Attacker's platform:& vulnerable\\
-            \end{tabular}}} }
+        child { node[not, right=1.5em of pe] (a) {Complement of Case (A)}}
+        child { node[solved, right=1.5em of a, yshift=-10pt] {Case (A):\\                Target platform: secure\\
+                Attacker's platform: vulnerable}}}
       child { node[solved, yshift=12pt] (physical) {Physical} } };
       
     %\node[below=0cm of name] {Foreshadow~\cite{foreshadow-usenix18}};
-    \node[below=0cm of physical](power) {Power analysis~\cite{wang2006covert}};
-    \node[below=-5pt of power](EM) {EM radiation~\cite{gandolfi2001electromagnetic}};
-    \node[below=-5pt of EM](ac) {Acoustic~\cite{shamir2004acoustic}};
+    \node[below=0cm of physical](power) {Power analysis}; %~\cite{wang2006covert}};
+    \node[below=-5pt of power](EM) {EM radiation}; %~\cite{gandolfi2001electromagnetic}};
+    \node[below=-5pt of EM](ac) {Acoustic}; %~\cite{shamir2004acoustic}};
          
-    \node[left=10pt of soft](page) {Page fault~\cite{xu2015controlled}};
-    \node[above=-3pt of page](cache) {Cache~\cite{dall2018cachequote}};
-    \node[below=-2pt of page](branch) {Branch prediction~\cite{lee2017inferring}};
+    \node[left=10pt of soft](page) {Page fault}; %~\cite{xu2015controlled}};
+    \node[above=-3pt of page](cache) {Cache}; %~\cite{dall2018cachequote}};
+    \node[below=-2pt of page](branch) {Branch prediction}; %~\cite{lee2017inferring}};
     %\node[below=-5pt of branch](synch) {Synchronization~\cite{asyncshock}};
       
     \node[solved, right=4em of root,  minimum size=3mm](l1) {};
@@ -55,22 +52,19 @@ sibling distance=12em]]
     
     \end{tikzpicture}
     
-    \caption{\textbf{Relay attack implications.} The tree shows the types of attacks that are enabled by  redirection and ones that are independent of relay.}
+    \caption{Relay attack implications.}
     \label{fig:relayTree}
 \end{figure}            
 
 \paragraph{Relay attack implications}
-The main consequence of attestation redirection is that it \emph{increases the adversary's ability to attack the attested enclave} through side-channels which are a well-known limitation of SGX. In Figure~\ref{fig:relayTree} we highlight two major classes of attacks: those that are only possible by first performing a relay attack, which we denote as ``enabled by relay'', and those that can be done whether or not the attacker also does a relay attack, which we call ``independent of relay.''
+The main implication of relay attacks is that they \emph{increase} the adversary's ability to attack the attested enclave. As shown in Figure~\ref{fig:relayTree}, the first major benefit, from the point of view of the adversary, is that by re-direction the attestation to a platform that in the physical possession of the adversary, the adversary enables physical side-channel attacks such as acoustic, electric and electromagnetic monitoring, which have been shown to be both effective and inexpensive means to extract secrets from modern PC platforms. Hardening enclaves against physical side channels is known to be a difficult problem. 
 
-Our first observation is that attacks based on leaked attestation keys (e.g., ones obtained through the Foreshadow attack~\cite{foreshadow-usenix18}) are independent of relaying. If the adversary has obtained a valid and non-revoked attestation key, he can emulate an SGX processor on the target platform and obtain any secrets provisioned to it.
+Another benefit of relay attacks is that it may enable privilege escalation. In cases where the adversary has only compromised the user-space application that manages the enclave, and not the OS, the application can redirect the attestation to the attacker's remote platform where he controls the OS as well. In such cases, the relay enables digital side-channel attacks that require system privileges.
 
-One major benefit of the relay, from the adversary's point of view, is that it enables \emph{physical} side-channel attacks against application enclaves. Once a secret has been provisioned to the attacker's platform, she has as much time as she likes to perform the attack. Some examples of physical side-channel attacks are acoustic, electric and electromagnetic monitoring, which have been shown to be both effective and inexpensive means to extract secrets from modern PC platforms . Since the adversary does not have physical access to the target platform, such attacks are clearly not possible without relay. Hardening programs like enclaves against physical side channels is difficult and currently an open problem. Therefore, developers cannot easily defend their enclaves against physical side channels that are enabled by attestation redirection.
+The third, and perhaps the most subtle, implication of relay is that it can also enable software-based side-channel attacks that would not be otherwise possible due to timing of certain events (Case(A) in Figure~\ref{fig:relayTree}). One such example is a scenario, where, at the time of attestation and secret provisioning, the enclave is hardened against all known digital side-channel attacks (e.g., using tools like Raccoon~\cite{raccoon}). After secret provisioning, the OS compromise is detected and cleaned. Later, a new side-channel attack vector (that is not prevented by the used tools) is discovered. If the adversary performed redirection and the secret was provisioned to the attacker's machine, the new side channel is exploitable. Without the relay, the attack is not possible.
 
-Another possible benefit of relay attacks is that it may enable \emph{privilege escalation}. In cases where the adversary has only compromised the user-space application that manages the enclave, and not the OS, the application can redirect the attestation to the attacker's remote platform where he controls the OS as well. In such cases, the relay enables \emph{digital} side-channel attacks that require system privileges.
+Finally, we note that all attacks based on leaked attestation keys (e.g., ones obtained through the Foreshadow attack~\cite{foreshadow-usenix18}) are independent of relaying. If the adversary has obtained a valid and non-revoked attestation key, he can emulate an SGX processor on the target platform.
 
-The third, and perhaps the most subtle, implication of relay is that it can also enable software-based side-channel attacks that would not be possible to launch on the target platform due to \emph{timing of certain events}. These events include, but are not restricted to the provisioning of secrets to the enclave, the possible disinfection of the target platform from malicious software, and the discovery of a new side-channel attack. 
-
-Case B is reached whenever it occurs that by using a side channel the enclave is exploitable on the attacker's platform, but not on the target platform. A timeline of such case is shown in ..., where at the time of attestation and secret provisioning, the enclave is hardened against all known digital side-channel attacks (using tools like Raccoon~\cite{raccoon}). After secret provisioning, the OS compromise is detected and cleaned. Later, a new side-channel attack vector (that is not prevented by the used tools) is discovered. If the adversary performed redirection and the secret was provisioned to the attacker's machine, the new side channel is exploitable. Without the relay, the attack is not possible.
 
 \subsubsection*{\proximitee System}
 
