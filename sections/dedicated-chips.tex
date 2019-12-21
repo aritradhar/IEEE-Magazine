@@ -1,12 +1,12 @@
 \section*{Dedicated Security Chips}
 
-Major computing platform providers have recently enhanced their platforms with new types of dedicated security chips. We look at two examples of this trend: Google's Titan and Apple's T2 security chips.
+Major computing platform providers have recently enhanced their systems with new types of dedicated security chips. We look at two examples of this trend: Google's Titan and Apple's T2 security chips.
 
 \subsubsection*{Google Titan}
 
 Titan~\cite{titan} is a security chip implemented as a low-power microcontroller on Google's purpose-built server platforms. The Titan chip communicates with the main CPU via the Serial Peripheral Interface (SPI), and it interposes between the boot firmware flash and system components like the Platform Controller Hub (PCH).
 
- One of the main functionalities that Titan implements is \emph{secure boot}. When the server machine is powered up, Titan executes code, known as boot ROM, from its embedded read-only memory. This code is immutable and thus implicitly trusted. The boot ROM code loads Titan's firmware from the embedded flash memory and verifies its integrity using a digital signature. Once Titan's firmware is securely verified and running, it can verify the boot process of its host. Titan blocks PCH's access to the firmware flash until it has cryptographically verified the content of the flash, and then it releases the lock and allows the verified boot firmware to configure the machine and load the boot loader, which subsequently verifies and loads the OS. Such an iterative process allows precise control over which version of the system software is booted. 
+ One of the main functionalities that Titan implements is \emph{secure boot}. When the server machine is powered up, Titan executes code, known as boot ROM, from its embedded read-only memory. This code is immutable and thus implicitly trusted. The boot ROM code loads Titan's firmware from the embedded flash memory and verifies its integrity using a digital signature. Once Titan's firmware is securely verified and running, it can verify the boot process of its host. Titan blocks PCH's access to the firmware flash until it has cryptographically verified the content of the flash, and then it releases the lock and allows the verified boot firmware to configure the machine and load the boot loader which subsequently verifies and loads the OS. Such an iterative process allows precise control over which version of the system software is booted. 
 
 \begin{figure}[t]
     \centering
@@ -52,13 +52,15 @@ While specific attacks can be, and have been, mitigated (for example, Intel's mi
 
 Another security challenge for enclave architectures is the rich interface between the untrusted OS and the enclave. Enclaves must interact with the untrusted OS in many ways. For example, enclaves communicate with the rest of the world by sending and receiving messages through the OS. Enclaves also need to safely pause their execution for interrupts, so that the OS can process them. While enclave architectures provide coarse-grained memory isolation primitive at the hardware level, it is left to the developers to ensure that the interface is well implemented and protected on the software level. Common protective implementation tasks include sanitization of buffers and safety checks for pointers. 
 
-Because such checks can be tedious to implement correctly, several enclave runtimes like the Open Enclave SDK (\url{https://openenclave.io/sdk/}) have been developed to assist enclave developers. Unfortunately, recent research has shown that many such enclave runtimes have classical memory safety vulnerabilities~\cite{van2019tale}. Because dedicated security chips do not need equally extensive interaction with the OS, the interface towards the untrusted OS is easier to protect tightly. 
+Because such checks can be tedious to implement correctly, several enclave runtimes like the Open Enclave SDK (\url{https://openenclave.io/sdk/}) have been developed to assist enclave developers. However, recent research has shown that many such enclave runtimes have classical memory safety vulnerabilities~\cite{van2019tale}. Because dedicated security chips do not need equally extensive interaction with the OS, the interface towards the untrusted OS is easier to protect tightly. 
 
 
-\subsubsection*{Any Other Security Services?}
+\subsubsection*{Other Security Services?}
 
 To summarize our discussion so far, enclaves cannot implement all useful platform security mechanisms, and they have significant security issues. Dedicated security chips can address both of these concerns. 
 
-Obviously, the security mechanisms that can be implemented as dedicated security chips are not limited to the above-discussed examples like secure boot and disconnecting peripherals. Which other security mechanisms are missing from modern enclave-supporting computing architectures? And how should such security mechanisms be implemented as special-purpose security chips? Titan and T2 are integrated security chips. Are there use cases that would benefit from external, plug-and-play security tokens?
+Obviously, the security mechanisms that can be implemented as dedicated security chips are not limited to the above-discussed examples of secure boot and disconnecting peripherals. Which other security mechanisms would be useful? And how should such security mechanisms be implemented as special-purpose security chips? 
 
-In the rest of this article, we explore these questions by examining two case studies from our recent research. Our first case study is the implementation of a trusted path using a low-complexity hardware security module~\cite{protection}. After that, we explain how secure TEE identification for more secure attestation can be realized using a simple user-pluggable security token~\cite{proximitee}.
+Titan and T2 are two examples of integrated security chips that are permanently attached to the computing platform. Are there also use cases that would benefit from external, plug-and-play security tokens?
+
+In the rest of this article, we explore these questions by examining two case studies from our recent research. Our first case is implementation of a trusted path using a low-complexity hardware security module~\cite{protection}. After that, we explain how secure TEE identification for more secure attestation can be realized using a simple user-pluggable security token~\cite{proximitee}.
