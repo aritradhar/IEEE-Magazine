@@ -45,19 +45,47 @@ Given these principles, we designed a new trusted path system called \protection
 
 Figure~\ref{fig:architecture} shows the overview of \protection system. The central component of the solution is a low-complexity embedded device called \hub that intercepts key presses from a keyboard and movement events from a mouse, tracks mouse movements, and draws secure overlays. 
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[trim={0 8.5cm 17cm 0}, clip, width=0.9\linewidth]{approachOverview.pdf}
-    \caption{\protection system overview.}
-    \label{fig:architecture}
-\end{figure}
 
 \begin{figure}[t]
-    \centering
-    \includegraphics[trim={0 8cm 15cm 0}, clip, width=\linewidth]{overlayScreenShot_new.pdf}
+    \begin{center}
+        \begin{subfigure}{0.5\textwidth}
+        \centering
+            \includegraphics[trim={0 8.5cm 17cm 0}, clip, width=\linewidth]{approachOverview.pdf}
+             \caption{\protection system overview.}
+            \label{fig:architecture}    
+        \end{subfigure}
+    \end{center}
+    
+    %\vspace{1em} 
+    
+    \begin{center}
+        \begin{subfigure}{0.5\textwidth}
+        \centering
+       \includegraphics[trim={0 8cm 15cm 0}, clip, width=\linewidth]{overlayScreenShot_new.pdf}
     \caption{\protection user interface. \textbf{(a)} On the left, is shown the view of the attacker, where he sees the QR code that contains the signed UI specification. \textbf{(b)} In the middle, is shown what the user sees after \hub overlays security-sensitive UIs. \textbf{(c)} On the right, is illustrated how \protection focuses user's attention when the user enters the overlaid UI with her mouse.}
-    \label{fig:screenshot}
+        \label{fig:screenshot}
+    \end{subfigure}
+    \end{center}
+    
+    \caption{\protection system overview and user interface.} 
+    \label{fig:protection}
 \end{figure}
+
+
+% 
+% \begin{figure}[t]
+%     \centering
+%     \includegraphics[trim={0 8.5cm 17cm 0}, clip, width=0.9\linewidth]{approachOverview.pdf}
+%     \caption{\protection system overview.}
+%     \label{fig:architecture}
+% \end{figure}
+% 
+% \begin{figure}[t]
+%     \centering
+%     \includegraphics[trim={0 8cm 15cm 0}, clip, width=\linewidth]{overlayScreenShot_new.pdf}
+%     \caption{\protection user interface. \textbf{(a)} On the left, is shown the view of the attacker, where he sees the QR code that contains the signed UI specification. \textbf{(b)} In the middle, is shown what the user sees after \hub overlays security-sensitive UIs. \textbf{(c)} On the right, is illustrated how \protection focuses user's attention when the user enters the overlaid UI with her mouse.}
+%     \label{fig:screenshot}
+% \end{figure}
 
 When the user visits a web page that contains a protected web form, the remote server sends a QR code to the untrusted browser, as shown in Figure~\ref{fig:screenshot} on the left. The QR code contains a specification of the security-critical web form, and the specification is signed by the webserver to prevent its modification by the browser or the OS. By using QR codes, we enable communication from the webserver to the \hub device via an unmodified browser, which simplifies deployment significantly.
 
