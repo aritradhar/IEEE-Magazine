@@ -1,6 +1,6 @@
 \section*{Dedicated Security Chips}
 
-Computing platform providers have recently added new security chips to their systesms. We look at two examples: Google's Titan and Apple's T2 security chips.
+Computing platform providers have recently added new security chips to their systems. We look at two examples of this pattern: Google's Titan and Apple's T2 chips.
 
 \subsubsection*{Google Titan}
 
@@ -18,9 +18,9 @@ Titan~\cite{titan} is a security chip implemented as a low-power microcontroller
  
 \subsubsection*{Apple T2}
  
-Apple's latest PCs come with an integrated security chip called T2~\cite{t2} which also implements secure boot. When the machine with the T2 chip is turned on, T2 executes code from its read-only memory. This code verifies the next step of the T2's own boot process. Once T2 is fully running, it can verify the UEFI firmware, which will ensure that only authorized kernel will be booted on the host CPU.
+Apple's latest PCs come with a security chip called T2~\cite{t2} that also supports secure boot. When the machine with the T2 chip is turned on, T2 executes code from its read-only memory. This code verifies the next step of the T2's own boot process. Once T2 is fully running, it can verify the UEFI firmware, which will ensure that only authorized kernel will be booted on the host CPU.
 
-Besides secure boot, T2 also provides other security features such as protecting the user's fingerprint values or making sure that the microphone is disconnected from the main CPU when the laptop's lid is closed. 
+Besides secure boot, T2 provides also other security features such as protecting the user's fingerprint values or making sure that the microphone is disconnected from the main CPU when the laptop's lid is closed. 
  
  
 \subsubsection*{Missing Functionality}
@@ -59,8 +59,8 @@ Because such checks are tedious, several enclave runtimes like the Open Enclave 
 
 To summarize our discussion so far, enclaves cannot implement all useful platform security mechanisms, and they have significant security issues. Dedicated security chips can address both of these concerns. 
 
-Obviously, the security mechanisms that can be implemented as dedicated security chips are not limited to the above-discussed examples. Which other security services could be implemented as special-purpose security chips? 
+Obviously, the security services that can be implemented as dedicated security chips are not limited to the above-discussed examples. Which other services could be implemented as special-purpose security chips? 
 
-Titan and T2 are integrated security chips that are permanently attached to the computing platform. Are there use cases that would benefit from plug-and-play security tokens?
+Titan and T2 are integrated security chips that are permanently attached to the computing platform. Are there also use cases that would benefit from plug-and-play security tokens?
 
 In the rest of this article, we explore these questions by examining two case studies from our recent research. Our first case is trusted path~\cite{protection} and after that we focus on TEE identification and remote attestation~\cite{proximitee}.

@@ -1,14 +1,14 @@
 
-\section*{Discussion}
+\section*{Discussion and Comparison}
 
-Now that we have seen two commercial, integrated security chips (Titan and T2) and two user-attachable security tokens (\protection and \proximitee), we can compare these solutions based on their deployment options and security features. 
+Now that we have seen two commercial, integrated security chips (Titan and T2) and two user-attachable, research tokens (\protection and \proximitee), we can compare these solutions based on their deployment and security features. 
 
 \paragraph{Deployment options}
-Integrated security chips like Titan or T2 are limited to deployments by major service and platform providers that have the possibility to design and build their own systems. 
+Integrated security chips like Titan and T2 are, obviously, limited to deployments by major service and platform providers that have the possibility to design and build their own systems. 
 
-\proximitee is an example of a plug-and-play security token that can be attached to the target platform over a standard interface like USB. Obviously, the deployment of security solutions is a feasible option for a larger set of service providers. For example, cloud computing providers can enhance off-the-shelf servers with \proximitee tokens to support secure attestation. Another interesting use case is the secure setup of a permissioned blockchain where every consensus node is hardened with SGX enclaves. The trusted authority that appoints the consensus nodes and bootstraps the chain can issue a \key token to each organization that operates one node.
+\proximitee is an example of a plug-and-play security token that can be attached to the target platform over a standard interface like USB. Obviously, the deployment of security solutions is a feasible option for a larger set of service providers. For example, cloud computing providers can enhance off-the-shelf servers with \key tokens and communicate their public keys to their clients to support more secure attestation. Another interesting use case is the setup of a permissioned blockchain where every consensus node is hardened with SGX enclaves. The trusted authority that appoints the consensus nodes can issue a \key token to each organization that operates one node.
 
-Also \protection could be deployed as a plug-and-play security module. This is a good deployment option for web-based online services like e-voting and online banking as it allows voting authorities and banks to increase the security of their services without restricting the users' choice of client platform. In medical and industrial domains, an externally-attached \protection module can improve the security of safety-critical systems, even when modifications to the computing platform itself are prohibited due to strict regulations. Alternatively, \protection could be deployed as an integrated security chip such that its functionality is implemented as part of the integrated keyboard, mouse, and display controllers. 
+Also \protection could be deployed as a plug-and-play security module. Such deployment allows service providers like voting authorities and banks to increase the security of their services without restricting the users' choice of client platform. In medical and industrial domains, an externally-attached \protection module can improve the security of safety-critical systems, even when modifications to the computing platform itself are prohibited due to strict regulations. Alternatively, \protection could be deployed as an integrated security chip such that its functionality is implemented as part of the integrated keyboard, mouse, and display controllers. 
 
 %\begin{figure}[t]
 %    \centering
@@ -17,13 +17,13 @@ Also \protection could be deployed as a plug-and-play security module. This is a
 %\label{fig:prototype}   
 %\end{figure}
 
-\paragraph{Security Benefits}
+\paragraph{Security benefits}
 Titan and T2 are chips that enable security functionality like a secure boot that is missing from enclaves. Thus, the operation of Titan and T2 is largely orthogonal to the operation of enclaves. 
 
-In comparison, \proximitee is a security chip that is designed to work in collaboration with enclaves and improve their security guarantees by enabling secure TEE identification for hardened remote attestation. 
+In comparison, \proximitee is a security chip that is designed to work \emph{in collaboration} with enclaves and improve their security guarantees by enabling secure TEE identification for hardened remote attestation. 
 
 \protection is a solution that can either assist enclaves or operate independently of them. One possible usage for \protection is to enable a trusted path from the user to a local enclave, which can communicate securely with remote servers. In such a deployment, \protection works together with an enclave. 
-
-Alternatively, \protection could be used to create a trusted path from the user to a remote server without the use of enclaves. Such a deployment option may be beneficial, e.g., in cases where the risk of microarchitectural attacks on enclaves is considered too high, and thus trusted path should not rely on enclaves.
+%
+Alternatively, \protection could be used to create a trusted path from the user to a remote server without the use of enclaves. Such deployment is beneficial when the risk of microarchitectural attacks on enclaves is considered too high, for example.
 
 
