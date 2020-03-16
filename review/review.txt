@@ -1,0 +1,140 @@
+Reviewer: 1
+
+Recommendation: Accept If Certain Minor Revisions Are Made
+
+Comments:
+The central question of this article is very interesting and timely, especially as an increasing number of systems begin to support and/or use enclaves. It's also very relevant to this audience, and hasn't really been explored before.
+
+In my opinion, the article also strikes a good balance in discussing both current industry examples (Titan, T2) and recent research projects.
+
+I have some comments on the "TEE Identification and Attestation" section that might strengthen the article:
+
+1. Relay attack implications: This section essentially makes three claims about relay attacks, namely that this type of attack "enables physical side-channel attacks"; "enables privilege escalation"; and "can enable software-based side-channel attacks". Although the examples given are correct from a technical perspective, I think the phrasing in this section somewhat overclaims the attacks. These statements all assume that there are other types of defenses in place, beyond those provided by the enclave (e.g. prevention of physical attacks assumes physical security, and prevention of privilege escalation assumes a secure OS). I think it would be more accurate to explain that you are assuming these external-to-the-enclave defenses are in place, and that these are what the relay attack undermines. 
+
+As an aside, the fact that these external defenses are probably necessary for ensuring enclave security is itself an interesting point - could these be attested using a dedicated security chip?
+
+2. ProximiTEE System: This section gives a nice clear explanation of the ProximiTEE system architecture, however, one aspect I felt was missing was some justification for why this requires a dedicated security chip (i.e. the central question of the paper). As you explain in [2], there are other TOFU variants, including the VC3 approach of having a platform-specific enclave with a certified key pair, and trivially solving the problem using SGX local attestation between this enclave and the application enclaves. Can you compare ProximiTEE to this type of approach, from the perspective of security and/or deployability?
+
+[Minor point] There is a difference between relay attacks in the TPM context vs the enclave context. Since TPMs provide whole-platform attestation (or at least partial-platform attestation with DRTM), a relay attack may lead to a misbinding between the attestation (e.g. PCR values) and the software which will be provisioned with secrets. With enclaves, this is not the case because even relayed attestation is still a true representation of the software in the enclave. Relay attacks simply mean the enclave may be running on a different physical machine, which may or may not have certain external defenses (see point 1 above). You might want to clarify this as part of point 1 above.
+
+
+Minor points
+
+p6. I'm not sure what is meant by "In remote hardened remote attestation..."
+
+Additional Questions:
+1. How relevant is this manuscript to the readers of this periodical? Please explain your rating in the Detailed Comments section.: Relevant
+
+2. To what extent is this manuscript relevant to readers around the world?: The manuscript is of interest to readers throughout the world
+
+3. What is the most appropriate forum for the publication of this manuscript?: IEEE Magazine (general interest explanatory article with technical contributions)
+
+1. Please summarize what you view as the key point(s) of the manuscript and the importance of the content to the readers of this periodical.: This article aims to explore the use of dedicated security chips to complement modern secure enclaves (e.g. Intel SGX). Specifically, it discusses two commercial security chips (Google's Titan and Apple's T2), and two research systems that rely on secure peripherals. On the commercial side, the article discusses some of the functionality that cannot be achieved using enclaves alone (e.g. secure boot). The the research side, the article first summarizes the ProtecIOn system that protects the confidentiality and integrity of input and output by interposing a secure chip between the PC and peripherals. It then discusses the ProximiTEE system that uses a USB-attached secure device to confirm the locality of a TEE by performing a time-sensitive challenge-response protocol. The article concludes with a brief discussion and outlook.
+
+2. Is the manuscript technically sound? Please explain your answer in the Detailed Comments section.: Yes
+
+3. What do you see as this manuscript's contribution to the literature in this field?: The question of "why do we need dedicated security chips when we have enclaves?" is very interesting and relevant. This article takes a first step towards guiding the reader to think about this question.
+
+4. What do you see as the strongest aspect of this manuscript?: + The main question posed by the article is very relevant and timely.
+  + The article summarizes two published research papers, and attempts to synthesize a common theme.
+  + The text is well-written, and easy to read.
+
+5. What do you see as the weakest aspect of this manuscript?: - The implications of attestation relay attacks seem to be somewhat overclaimed (or rely on implicit assumptions).
+   - For the second research aspect (ProximiTEE), the article doesn't justify why a dedicated security chip is required to achieve the security goals.
+
+1. Does the manuscript contain title, abstract, and/or keywords?: Yes
+
+2. Are the title, abstract, and keywords appropriate? Please elaborate in the Detailed Comments section.: Yes
+
+3. Does the manuscript contain sufficient and appropriate references (maximum 15-unless the article is a survey or tutorial in scope)? Please elaborate in the Detailed Comments section.: References are sufficient and appropriate
+
+4. How would you rate the organization of the manuscript? Please elaborate in the Detailed Comments section.: Satisfactory
+
+5. Is the length of the manuscript appropriate for the topic? Please elaborate in the Detailed Comments section.: Satisfactory
+
+6. Please rate and comment on the readability of this manuscript in the Detailed Comments section.: Easy to read
+
+7. Please rate and comment on the timeliness and long term interest of this manuscript to S&P readers in the Detailed Comments section. Select all that apply.: Topic and content are of immediate and continuing interest to S&P readers. Topic and content are likely to be of growing interest to S&P readers over the next 12 months
+
+Please rate the manuscript. Explain your choice in the Detailed Comments section.: Good
+
+
+Reviewer: 2
+
+Recommendation: Author Should Prepare A Major Revision For A Second Review
+
+Comments:
+The core concept of this article, that a limited secure hardware
+element is a complement to enclaves, is a good one. There are a number
+of good points and the discussion of extensions to SGX using dedicated
+HW is informative. The final paragraph of the article posits an
+interesting direction worthy of far more discussion in the text!
+
+There are two major concerns I have with the current text.
+
+First, the majority of claims about enclaves/TEEs lacking
+functionality are specific to SGX. The text is almost entirely
+concerned with SGX in its current form. Concentrating on SGX is a
+reasonable approach, but it should be the explicit goal and general
+claims about all TEE systems (SGX, TZ, SEV, academic proposals, etc)
+should be made very carefully. Relay attacks, for example, would work
+entirely differently with different attestation and keying schemes
+than SGX uses.
+
+The largest problem is the lack of framing of SGX's intent. The
+framing of enclaves as 'missing functionality' confuses the
+claims. For example, SGX does not include verification of the host OS
+because it is not part of the security objectives of SGX. Sections
+like 'Trusted Path', 'Missing functionality', and 'Relay Attacks' all
+frame SGX as having a vulnerability or bug, rather than a specific set
+of functionality trade-offs. (In contrast, the discussion of the
+impact of Spectre-class vulnerabilities does describe bugs in SGX)
+
+I believe that carefully explaining the design goals and threat model
+of SGX in contrast to the new objectives you are presenting (trusted
+IO path, etc) will make for a significantly stronger article.
+
+Fundamentally, when reading this article I am left with the impression
+that SGX is intended as a solution to all problems but currently has
+bugs and missing features. In reality, SGX is intended to solve a
+specific set of problems. I entirely agree there are serious
+challenges to SGX's ability to solve even those problems. The new
+use-cases SGX is being asked to solve are interesting and should
+absolutely be examined, but from the context that SGX is not intended
+to solve such problems.
+
+
+Additional Questions:
+1. How relevant is this manuscript to the readers of this periodical? Please explain your rating in the Detailed Comments section.: Relevant
+
+2. To what extent is this manuscript relevant to readers around the world?: The manuscript is of interest to readers throughout the world
+
+3. What is the most appropriate forum for the publication of this manuscript?: IEEE Magazine (general interest explanatory article with technical contributions)
+
+1. Please summarize what you view as the key point(s) of the manuscript and the importance of the content to the readers of this periodical.: This article presents a summary of SGX and several dedicated security chips (T2 and Titan), and argues that the combination of these is stronger than either alone. The authors describe functionality they view as missing from SGX and their previously proposed extensions to enable such functionality.
+
+2. Is the manuscript technically sound? Please explain your answer in the Detailed Comments section.: Partially
+
+3. What do you see as this manuscript's contribution to the literature in this field?: Summary of areas in which SGX does not currently contribute to
+security, and a summary of potential hardware-based extensions.
+
+4. What do you see as the strongest aspect of this manuscript?: Core concept of adding minimal external hardware extensions to
+complement TEE systems is well motivated and of interest.
+
+5. What do you see as the weakest aspect of this manuscript?: Significant lack of clarity around SGX's intent and threat model.
+
+1. Does the manuscript contain title, abstract, and/or keywords?: Yes
+
+2. Are the title, abstract, and keywords appropriate? Please elaborate in the Detailed Comments section.: Yes
+
+3. Does the manuscript contain sufficient and appropriate references (maximum 15-unless the article is a survey or tutorial in scope)? Please elaborate in the Detailed Comments section.: References are sufficient and appropriate
+
+4. How would you rate the organization of the manuscript? Please elaborate in the Detailed Comments section.: Satisfactory
+
+5. Is the length of the manuscript appropriate for the topic? Please elaborate in the Detailed Comments section.: Could be improved
+
+6. Please rate and comment on the readability of this manuscript in the Detailed Comments section.: Easy to read
+
+7. Please rate and comment on the timeliness and long term interest of this manuscript to S&P readers in the Detailed Comments section. Select all that apply.: Topic and content are of immediate and continuing interest to S&P readers
+
+Please rate the manuscript. Explain your choice in the Detailed Comments section.: Fair
