@@ -10,7 +10,7 @@ In most applications, secure computation alone is insufficient. What is rather n
 Although the above-outlined attestation scheme is useful, it also has a known weakness. %As is shown in Figure~\ref{fig:SystemModel}, 
 An adversary that controls the OS on the attested platform can easily \emph{re-direct} the attestation challenge to another platform that computes the response. 
 %
-The verifier cannot notice such \emph{relay attacks}, since the attestation mechanism is based on a group signature scheme, and all processors from the same group produce indistinguishable signatures. (Even if attestation would use traditional digital signatures, it would be very difficult for the verifier to know which signing key corresponds to which CPU.) 
+The verifier cannot notice such \emph{relay attacks}, since the attestation mechanism is based on a group signature scheme, and all processors from the same group produce indistinguishable signatures. (Even if attestation used traditional digital signatures, it would be very difficult for the verifier to know which signing key corresponds to which CPU.) \red{\#R2 note that in this article, we use Intel SGX to demonstrate relay. However, other TEEs such as ARM TrustZone, RISC-V keystone, etc. do not provide any means for platform identification, hence, vulnerable to relay.}
 
 %\begin{figure}[t]
 %    \centering
@@ -20,6 +20,8 @@ The verifier cannot notice such \emph{relay attacks}, since the attestation mech
 %\end{figure}
 
 Relay attacks have been known for a long time. Parno identified them in the context of TPM attestation over a decade ago and called them ``cuckoo attacks''~\cite{parno2008bootstrapping}. However, the full implications of relay attacks have not been well understood. Since attestation can only be redirected to another legitimate processor, it may appear that such relay attacks do not have noteworthy negative implications. Our analysis shows that such a belief is misguided.
+
+\red{\#R1 The relay attack may seem like a bug in the existing TEEs. On the contrary, platform identification is an additional security property of the attestation that can not be provided by the enclaves itself. Without external hardware, mitigating the relay attack is not possible. Hence, the TEEs do not offer such property.}
 
 \begin{figure}[t]
 \footnotesize
@@ -64,7 +66,7 @@ sibling distance=12em]]
 \paragraph{Relay attack implications}
 The main implication of relay attacks is that they \emph{increase} the adversary's ability to attack the attested enclave. Figure~\ref{fig:relayTree} shows a classification tree of the types of attacks that are made possible by relaying the attestation (and ones that are independent of relaying). 
 
-Our first observation is that by re-directing the attestation to the adversary's platform, the adversary enables \emph{physical} side-channel attacks such as acoustic, electric and electromagnetic monitoring, which have been shown to be effective and inexpensive means to extract secrets from modern PC platforms~\cite{genkin2016physical}. Hardening enclaves against physical side channels is difficult. 
+Our first observation is that by re-directing the attestation to the adversary's platform, the adversary enables \emph{physical} side-channel attacks such as acoustic, electric and electromagnetic monitoring \red{\#R1 which are otherwise not possible to mount on the victim's platform. These side channels} have been shown to be effective and inexpensive means to extract secrets from modern PC platforms~\cite{genkin2016physical}. Hardening enclaves against physical side channels is difficult. 
 
 Relay attacks can also enable \emph{privilege escalation}. In cases where the adversary has only compromised the user-space application that manages the enclave on the victim platform, the application can redirect the attestation to the attacker's platform where he controls the OS as well. In such cases, the relay enables \emph{digital} side-channel attacks that require system privileges.
 
@@ -80,8 +82,8 @@ Parno identified relay attacks more than a decade ago and, at the same time, sug
 Although this idea sounds simple to realize, the research efforts that followed failed to implement secure proximity verification. The main reason for the failure was that TPM, the secure element commonly available at the time, supported only fixed identification operations like digital signatures. TPM signatures may take up to one second, which allows the redirected attestation request to travel a long distance, and thus TPMs were simply too slow for secure proximity verification. %~\cite{CatchingCuckoo}.
 
 Because SGX enclaves are programmable, it is possible to implement proximity verification protocols that leverage simple operations like \texttt{XOR} that enable fast challenge-response rounds. Based on this observation, we designed a hardened SGX attestation scheme, called \proximitee~\cite{proximitee}. %, that is illustrated in Figure~\ref{fig:proximitee}. 
-\red{One strawman solution is to use the SGX local attestation using a challenger enclave. This will prove if the application enclave and the challenger enclave are running on the same platform. But this solution won't work because deploying the challenger enclave requires attestation to that enclave where the attacker can mount the relay attack. Hence, only way to solve the problem is to introduce a trusted device that is \emph{external} to the platform to prove the proximity.}
-Our solution uses a simple embedded device called \key that is attached to the target platform over a local communication interface like USB. In remote hardened remote attestation, the verifier first establishes a secure channel a \key whose public key the verifier learns from its issuer. \key performs standard remote attestation on the local enclave, establishes a secure TLS channel to it, and verifies its proximity using a simple distance-bounding protocol that consist of repeated and fast challenge-response rounds. If such proximity verification succeeds, \key facilitates the creation of a secure channel between the remote verifier and the attested enclave. 
+\red{\#R1 One strawman solution is to use the SGX local attestation using a challenger enclave. This will prove if the application enclave and the challenger enclave are running on the same platform. But this solution won't work because deploying the challenger enclave requires attestation to that enclave where the attacker can mount the relay attack. Hence, the only way to solve the problem is to introduce a trusted device that is \emph{external} to the platform to prove the proximity.}
+Our solution uses a simple embedded device called \key that is attached to the target platform over a local communication interface like USB. \red{\#R1 In hardened remote attestation}, the verifier first establishes a secure channel a \key whose public key the verifier learns from its issuer. \key performs standard remote attestation on the local enclave, establishes a secure TLS channel to it, and verifies its proximity using a simple distance-bounding protocol that consist of repeated and fast challenge-response rounds. If such proximity verification succeeds, \key facilitates the creation of a secure channel between the remote verifier and the attested enclave. 
 
 
 %\begin{figure}[t]
