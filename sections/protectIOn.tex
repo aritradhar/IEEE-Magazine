@@ -1,11 +1,12 @@
 
 \section*{Trusted Path}
 
-SGX enclaves provide secure \emph{computation}, as their execution is isolated from other software on the same platform. However, enclaves do not easily lend themselves to secure \emph{user interaction}. The main reason for this is that, in an architecture like SGX, enclaves communicate with I/O devices through the untrusted OS. When an enclave needs to receive user input, the OS needs to pass data from an input device like a keyboard to the enclave. When an enclave creates user output, the OS must forward data to an output device like display. Such TEE design means that a compromised OS can easily modify any user inputs and outputs.
+\update{2}{The main goal of SGX is to enable secure computation for enclaves.} However, enclaves do not easily lend themselves to secure \emph{user interaction}. The main reason for this is that, in an architecture like SGX, enclaves communicate with I/O devices through the untrusted OS. When an enclave needs to receive user input, the OS needs to pass data from an input device like a keyboard to the enclave. When an enclave creates user output, the OS must forward data to an output device like display. Such TEE design means that a compromised OS can easily modify any user inputs and outputs.
+\update{2}{Indeed, \emph{trusted path} --- a secure channel from the human user to a trusted application like enclave --- is outside the previously stated security objectives of SGX~\cite{mckeen2013}.} 
 
 User input manipulation can have severe consequences. If a malicious OS modifies the user input that is provided to a financial enclave, the enclave can be tricked to perform unauthorized payments. If enclaves are used to implement hardened medical devices or industrial systems, user input modifications may cause serious safety and health risks. Also, any enclave that needs user passwords or similar credentials is difficult to implement securely.
 
-The lack of protected user interaction means that enclaves do not support \emph{trusted path} --- a secure channel from the human user to a trusted application. 
+%The lack of protected user interaction means that enclaves do not support \emph{trusted path} --- a secure channel from the human user to a trusted application. 
 
 %Depending on the application scenario, two different types of trusted paths may be desirable. The first, and more common, the definition of a trusted path is a secure communication channel between the human user and a \emph{local} trusted application like an enclave. The second, and perhaps less common, the definition of the trusted path is one that realizes a secure communication channel between the user and the \emph{remote} server without using any trusted local application in between. 
 

@@ -29,7 +29,7 @@ Besides secure boot, T2 provides also other security features such as protecting
   
 Both Titan and T2 implement secure boot. Secure boot is also a good example of a security mechanism \update{2}{that is beyond the security objectives of SGX.}
 
-\update{2}{SGX was designed to provide a specific set of protections. These protections include detection of integrity violation of an enclave instance, confidentiality of enclave's data, isolation between enclaves, and enforcement that enclave's execution always starts from an authorized location~\cite{mckeen2013}.} 
+\update{2}{SGX was designed to provide a specific set of protections. These protections include detection of integrity violation of an enclave instance, confidentiality of enclave's data, isolation between enclaves, and enforcement that enclave's execution always starts from an authorized location~\cite{mckeen2013}. In other words, the primary goal of SGX is to enable \emph{secure computation} on untrusted computing platform.} 
 
 \update{2}{Because the security objectives of SGX do not include OS integrity verification, platform providers have added dedicated security chips, like Titan and T2, to implement such security functionality.} Disconnecting the microphones from the main CPU is another example of a security feature that is not provided by enclaves. (As noted in Textbox 1, other processor-based TEEs like the ARM TrustZone architecture can accommondate secure boot.) 
 
@@ -48,7 +48,7 @@ Both Titan and T2 implement secure boot. Secure boot is also a good example of a
 
 \subsubsection*{Security Weaknesses}
 
-Besides missing functionality, enclaves also have security weaknesses. Since enclaves and untrusted code share the same CPU, they can be susceptible to side-channel leakage and microarchitectural attacks. The recently discovered Spectre and Meltdown vulnerabilities showed how transient execution could leak information across isolation boundaries. The same idea was successfully applied to extract secret keys from SGX enclaves in the Foreshadow attack~\cite{van2018foreshadow}. 
+\update{2}{Besides limited security objectives}, enclaves also have security weaknesses. Since enclaves and untrusted code share the same CPU, they can be susceptible to side-channel leakage and microarchitectural attacks. The recently discovered Spectre and Meltdown vulnerabilities showed how transient execution could leak information across isolation boundaries. The same idea was successfully applied to extract secret keys from SGX enclaves in the Foreshadow attack~\cite{van2018foreshadow}. 
 
 While specific attacks can be, and have been, mitigated (e.g., Intel's microcode updates include Spectre and Meltdown patches), side-channels and microarchitectural attacks continue to be a concern for enclaves. The root cause is that modern processors are extremely complex systems that have been optimized over decades. Enclave support was added on top of many layers of performance optimizations, and now, in hindsight, one can easily say that this approach was not the ideal foundation for strong isolation. In this regard, dedicated security chips have a clear advantage over enclaves.
 
@@ -59,10 +59,12 @@ Because such checks are tedious, several enclave runtimes like the Open Enclave 
 
 \subsubsection*{Other Security Services?}
 
-To summarize our discussion so far, enclaves cannot implement all useful platform security mechanisms, and they have significant security issues. Dedicated security chips can address both of these concerns. 
+To summarize our discussion so far, enclaves do not implement all useful platform security mechanisms, and they also have significant security issues. Dedicated security chips can address both of these concerns. 
 
 Obviously, the security services that can be implemented as dedicated security chips are not limited to the above-discussed examples. Which other services could be implemented as special-purpose security chips? 
 
 Titan and T2 are integrated security chips that are permanently attached to the computing platform. Are there also use cases that would benefit from plug-and-play security tokens?
 
-In the rest of this article, we explore these questions by examining two case studies from our recent research. Our first case is trusted path~\cite{protection}, \red{\#R1 where we explore how dedicated security chips enable trusted path to untrusted platform} and after that we focus on TEE identification and remote attestation~\cite{proximitee} \red{that uses a dedicated external hardware in order to harden the Intel SGX's remote attestation}.
+In the rest of this article, we explore these questions by examining two example from our recent research. Our first example is trusted path~\cite{protection}, %\red{\#R1 where we explore how dedicated security chips enable trusted path to untrusted platform} 
+and after that we focus on TEE identification and remote attestation~\cite{proximitee}. 
+%\red{that uses a dedicated external hardware in order to harden the Intel SGX's remote attestation}.
