@@ -1,11 +1,9 @@
 
-\section*{Outlook}
+\section*{\update{5}{Past and Future}}
 
-%We end this article by outlining possible future directions for enclaves and dedicated security chips. We also discuss how these two closely-related but still somewhat different hardware-assisted security mechanisms can work in collaboration.
+\update{5}{The overall idea of a dedicated security chip that assists the CPU in secure execution is not entirely new, of course. One early application of the same concept is AMD's Secure Virtual Machine technology that creates a  secure execution environment as follows: the CPU measure code in a specific memory region, enables DMA protections for that region, disables interrupts, records the measurement into a PCR register of a TPM chip, and finally begins executing the measured code. Essentially, this sequence of events provides a clean execution of the measured code without restarting the whole platform, and therefore this technology is often called ``late launch''. In such late launch scheme, the dedicated security chip (TPM) records the code that was securely started so that external verifiers can check its integrity using attestation.}
 
-%Future computing architectures are likely to be more diverse than the ones we use today. The paradigm that has been prevalent for the past few decades is to perform most of the computation in one or more general-purpose processing units. Modern computing platforms often incorporate more specialized computing units like GPUs. 
-
-Future computing platforms are likely to combine various computing units like CPUs, GPUs, TPUs, FPGAs and more. %~\cite{dean2018new}.
+Future computing platforms are likely to combine various computing units like CPUs, GPUs, TPUs, FPGAs and more. 
 Similar to the current enclave architectures that enhance CPUs with secure execution capabilities, also other processing units like GPUs and FPGAs will need secure computation. There are already several on-going research efforts that explore the design of such TEEs~\cite{volos2018graviton}.
 
 Our research on trusted path (the \protection system~\cite{protection}) highlights that I/O devices need secure communication with enclaves. Similarly, also other peripherals like GPS units and fingerprint sensors would benefit from secure communication with enclaves. Protected communication between TEEs and other platform components requires authentication, enclave identification and access control mechanisms. The ARM TrustZone architecture has limited support towards this direction. In TrustZone, hardware components like memory controllers can make coarse-grained access control decisions based on the CPU's execution mode~\cite{ekberg2014untapped}. 
