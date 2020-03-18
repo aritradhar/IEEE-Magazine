@@ -23,13 +23,15 @@ Apple's latest PCs come with a security chip called T2~\cite{t2} that also suppo
 Besides secure boot, T2 provides also other security features such as protecting the user's fingerprint values or making sure that the microphone is disconnected from the main CPU when the laptop's lid is closed. 
  
  
-\subsubsection*{Missing Functionality}
+\subsubsection*{\update{2}{Specific Security Objectives}}
+
+%In SGX, enclaves are constructed by the untrusted OS. The construction process of the enclave --- that is, the sequence of setup instructions and their parameters --- is recorded by the CPU so that it can be later communicated to an external verifier using the built-in attestation mechanism. This ensures that secrets will be provisioned only to correctly constructed enclave, and the untrusted OS cannot access those secrets. Thus, SGX enclaves are protected from the OS, but they \emph{cannot exist without it}. 
   
-Both Titan and T2 implement secure boot. Secure boot is also a good example of a security mechanism that cannot be implemented using SGX-style enclaves. 
+Both Titan and T2 implement secure boot. Secure boot is also a good example of a security mechanism \update{2}{that is beyond the security objectives of SGX.}
 
-In SGX, enclaves are constructed by the untrusted OS. The construction process of the enclave --- that is, the sequence of setup instructions and their parameters --- is recorded by the CPU so that it can be later communicated to an external verifier using the built-in attestation mechanism. This ensures that secrets will be provisioned only to correctly constructed enclave, and the untrusted OS cannot access those secrets. Thus, SGX enclaves are protected from the OS, but they \emph{cannot exist without it}. 
+\update{2}{SGX was designed to provide a specific set of protections. These protections include detection of integrity violation of an enclave instance, confidentiality of enclave's data, isolation between enclaves, and enforcement that enclave's execution always starts from an authorized location~\cite{mckeen2013}.} 
 
-A direct implication of such TEE design is that enclaves cannot verify the integrity of the booted OS. (As noted in Textbox 1 above, other processor-based TEE architectures like the ARM TrustZone architecture are better suited for secure boot.) Because enclaves cannot implement all the needed security services, platform providers have added dedicated security chips, like Titan and T2, to implement the missing functionality. Disconnecting the microphones from the main CPU is another example of a security feature that cannot be implemented using enclaves.
+\update{2}{Because the security objectives of SGX do not include OS integrity verification, platform providers have added dedicated security chips, like Titan and T2, to implement such security functionality.} Disconnecting the microphones from the main CPU is another example of a security feature that is not provided by enclaves. (As noted in Textbox 1, other processor-based TEEs like the ARM TrustZone architecture can accommondate secure boot.) 
 
 %% ------------ %%
 
