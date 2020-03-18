@@ -1,7 +1,5 @@
 
-\section*{\update{5}{Past and Future}}
-
-\update{5}{The overall idea of a dedicated security chip that assists the CPU in secure execution is not entirely new, of course. One early application of the same concept is AMD's Secure Virtual Machine technology that creates a  secure execution environment as follows: the CPU measure code in a specific memory region, enables DMA protections for that region, disables interrupts, records the measurement into a PCR register of a TPM chip, and finally begins executing the measured code. Essentially, this sequence of events provides a clean execution of the measured code without restarting the whole platform, and therefore this technology is often called ``late launch''. In late launch, the dedicated security chip (TPM) helps the CPU by recording the code that was started so that external verifiers can check its integrity using attestation.}
+\section*{Outlook}
 
 Future computing platforms are likely to combine various computing units like CPUs, GPUs, TPUs, FPGAs and more. 
 Similar to the current enclave architectures that enhance CPUs with secure execution capabilities, also other processing units like GPUs and FPGAs will need secure computation. There are already several on-going research efforts that explore the design of such TEEs~\cite{volos2018graviton}.
