@@ -73,7 +73,7 @@ Finally, we note that attacks based on leaked attestation keys (e.g., ones obtai
 
 \paragraph{Trust on first use}
 
-\update{4}{A commonly suggested solution to relay attacks is to apply \emph{trust on first use} (TOFU). In one such example system~\cite{vc3} a platform-specific enclave generates a key pair and exports the public part of the key for certification right after a fresh OS installation. When remote verifiers need to attest other enclaves on that platform, they can first authenticate the certified enclave which in turn performs local attestation of the target enclave (SGX provides a local attestation primitive that cannot be relayed).} 
+\update{4}{A commonly suggested solution to relay attacks is to apply \emph{trust on first use} (TOFU). One possible solution is to use a platform-specific enclave that generates a key pair and exports the public part of the key for certification right after a fresh OS installation. When remote verifiers need to attest other enclaves on that platform, they can first authenticate the certified enclave which in turn performs local attestation of the target enclave (SGX provides a local attestation primitive that cannot be relayed).} 
 
 \update{4}{Such TOFU solution has several problems. The first is large temporary TCB, as a complete general-purpose OS needs to be trusted during the first boot. The second is difficult deployment, because fresh OS re-installation is not always possible. The third problem is the need for online authorities which increases their attack surface, assuming that the certification process is automated.}
 
