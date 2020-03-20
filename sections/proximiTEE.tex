@@ -7,7 +7,7 @@ Remote attestation process allows remote verifiers to detect enclave integrity v
 
 \subsubsection*{Relay Attacks}
 
-The above-outlined attestation scheme is a useful primitive, but it also has a well-known problem. 
+The above outlined remote attestation protocol is a useful security mechanism, but it also has a well-known problem. 
 An adversary that controls the OS on the attested platform can easily \emph{re-direct} the attestation challenge to another platform that computes the response. 
 The verifier cannot notice such \emph{relay attacks}, since the SGX attestation mechanism is based on a group signature scheme, and all processors from the same group produce indistinguishable signatures. (Even if attestation used traditional digital signatures, it would be very difficult in practice for the verifier to know which signing key corresponds to which CPU.) \update{2}{In other words, SGX guarantees detection of enclave's integrity violation, but  identification of the computing platform in which the attested enclave is running is not part of its security objectives.}
 
@@ -62,7 +62,7 @@ Relay attacks have been known for a long time. Parno identified them in the cont
 
 %Figure~\ref{fig:relayTree} shows a classification tree of the types of attacks that are made possible by relaying the attestation (and ones that are independent of relaying). 
 
-Our first observation is that by re-directing the attestation to the adversary's platform, the adversary enables \emph{physical} side-channel attacks such as acoustic, electric and electromagnetic monitoring \update{3}{which otherwise would not be possible to mount on the victim's platform}. Such side channels have been shown to be effective and inexpensive means to extract secrets from modern PC platforms~\cite{genkin2016physical} and hardening enclaves against physical side channels is difficult. 
+Our first observation is that by re-directing the attestation to the adversary's platform, the adversary enables \emph{physical} side-channel attacks such as acoustic, electric and electromagnetic monitoring \update{3}{which otherwise would not be possible to mount on the victim's platform}. Such side channels have been shown to be effective and inexpensive means to extract secrets~\cite{genkin2016physical} and hardening enclaves against all possible physical side channels is difficult. 
 
 Relay attacks can also enable \emph{privilege escalation}. In cases where the adversary has only compromised the user-space application that manages the enclave on the victim platform, the application can redirect the attestation to the attacker's platform where he controls the OS as well. In such cases, the relay enables digital side-channel attacks that require system privileges.
 
@@ -73,16 +73,16 @@ Finally, we note that attacks based on leaked attestation keys (e.g., ones obtai
 
 \paragraph{Trust on first use}
 
-\update{4}{A commonly suggested solution to relay attacks is to apply the principle of \emph{trust on first use} (TOFU). One possible solution is to use a platform-specific enclave that generates a key pair and exports the public part of the key for certification right after a fresh OS installation. When remote verifiers need to attest other enclaves on that platform, they can first authenticate the certified enclave which in turn performs local attestation of the target enclave (SGX provides a local attestation primitive that cannot be relayed).} 
+\update{4}{A commonly suggested solution to relay attacks is the principle of \emph{trust on first use} (TOFU). In one example solution a platform-specific enclave generates a key pair and exports the public part of the key for certification right after a fresh OS installation. When remote verifiers need to attest other enclaves on that platform, they can first authenticate the certified enclave which in turn performs local attestation of the target enclave (SGX provides a local attestation primitive that cannot be relayed).} 
 
 \update{4}{Such TOFU solution has several problems. The first is large temporary TCB, as a complete general-purpose OS needs to be trusted during the first boot. The second is difficult deployment, because fresh OS re-installation is not always possible. The third problem is the need for online authorities which increases their attack surface, assuming that the certification process is automated.}
 
  
 \subsubsection*{\proximitee System}
 
-Parno identified relay attacks more than a decade ago and, at the same time, suggested \emph{proximity verification} using a trusted device as a solution~\cite{parno2008bootstrapping}. The main idea was to verify that the attested CPU is in the proximity of the verifier which should prevent attestation redirection to remote platforms. 
+Parno identified relay attacks more than a decade ago and, at the same time, suggested \emph{proximity verification} as a solution~\cite{parno2008bootstrapping}. The main idea was to verify that the attested CPU is in the proximity of the verifier device which should prevent attestation redirection to remote platforms. 
 
-\update{4}{Proximity verification using an external device overcomes the above listed main problems of TOFU approaches. First, the TCB is small, as the verifier can be a single-purpose device and thus very simple. Second, adoption of such solution is easy, as there is no need to fully reset the target platform. And third, the authority that certifies the verifier device can remain fully offline.}
+\update{4}{Proximity verification using an external device overcomes the above listed main problems of TOFU approaches. First, the TCB is small, as the verifier device can be a single-purpose and thus very simple. Second, adoption of such solution is easy, as there is no need to fully reset the target platform. And third, the authority that certifies the verifier device can remain fully offline.}
 
 Although the idea of proximity verification sounds simple to realize, the research efforts that followed failed to implement secure proximity verification. The main reason for the failure was that TPM, the secure element commonly available at the time, supported only fixed identification operations like digital signatures. TPM signatures may take up to one second, which allows the redirected attestation request to travel a long distance, and thus TPMs were simply too slow for secure proximity verification. %~\cite{CatchingCuckoo}.
 
