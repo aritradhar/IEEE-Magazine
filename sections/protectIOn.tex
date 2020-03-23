@@ -1,7 +1,7 @@
 
 \section*{Trusted Path}
 
-\update{2}{The main goal of SGX is to enable secure computation for enclaves.} Such enclaves do not easily lend themselves to secure \emph{user interaction}. The main reason for this is that, in an architecture like SGX, enclaves communicate with I/O devices through the untrusted OS. When an enclave needs to receive user input, the OS needs to pass data from an input device like a keyboard to the enclave. When an enclave creates user output, the OS must forward data to an output device like display. Such TEE design means that a compromised OS can easily modify any user inputs and outputs.
+\update{2}{The main goal of SGX is to enable secure computation for enclaves.} Such enclaves do not easily lend themselves to secure \emph{user interaction}. The main reason for this is that, in architecture like SGX, enclaves communicate with I/O devices through the untrusted OS. When an enclave needs to receive user input, the OS needs to pass data from an input device like a keyboard to the enclave. When an enclave creates user output, the OS must forward data to an output device like display. Such TEE design means that a compromised OS can easily modify any user inputs and outputs.
 \update{2}{Indeed, \emph{trusted path} --- a secure channel from the human user to a trusted application like enclave --- is outside the security objectives of SGX~\cite{mckeen2013}.} 
 
 User input manipulation can have severe consequences. If a malicious OS modifies the user input that is provided to a financial enclave, the enclave can be tricked to perform unauthorized payments. If enclaves are used to implement hardened medical devices or industrial systems, user input modifications may cause serious safety and health risks. Also, any enclave that needs user passwords or similar credentials is difficult to implement securely.
@@ -23,9 +23,9 @@ This approach has two main problems. The first is the fact that the user now has
 \textbf{Principle 1:} Out-of-context security confirmations have a high cognitive load and risk of user habituation. Thus, user interaction should be protected in the context of the normal user interface.
 \end{tcolorbox}
 
-The next approach that we examine is \emph{input signing}~\cite{IntegriKey}. Here, the main idea is to use a simple hardware device that sits \emph{in-between} a user input device, such as a keyboard, and the untrusted computing platform. The device intercepts every keypress, or similar user input event, and sends a signed trace of them to the trusted application. %(Such technique is sometimes also referred as ``bump-in-the-wire''.)%~\cite{McCPerRei2006}.) 
+The next approach that we examine is \emph{input signing}~\cite{IntegriKey}. Here, the main idea is to use a simple hardware device that sits \emph{in-between} a user input device, such as a keyboard, and the untrusted computing platform. The device intercepts every keypress, or similar user input event, and sends a signed trace of them to the trusted application. %(Such technique is sometimes also referred to as ``bump-in-the-wire''.)%~\cite{McCPerRei2006}.) 
 
-Input signing conforms to our first principle, because the user does not have to interact outside the main UI. However, such solutions are vulnerable to attacks, where the adversary manipulates the user's input by showing false information on the output channel. That is, output manipulation leads to user input integrity violation. One example is a \emph{fake-typo} attack. Assume that the user types in value ``10'', but the adversary shows ``1'' on the screen. The user is likely to think that he mistyped and press ``0'' again. As a result, a signed trace of ``100'' will be sent to the trusted application. This simple attack leads us to our next design principle.
+Input signing conforms to our first principle because the user does not have to interact outside the main UI. However, such solutions are vulnerable to attacks, where the adversary manipulates the user's input by showing false information on the output channel. That is, output manipulation leads to user input integrity violation. One example is a \emph{fake-typo} attack. Assume that the user types in value ``10'', but the adversary shows ``1'' on the screen. The user is likely to think that he mistyped and press ``0'' again. As a result, a signed trace of ``100'' will be sent to the trusted application. This simple attack leads us to our next design principle.
 
 \begin{tcolorbox}
 \textbf{Principle 2:} User input and output integrity cannot be considered in isolation. Both must be protected simultaneously.
@@ -33,7 +33,7 @@ Input signing conforms to our first principle, because the user does not have to
 
 The last approach that we examine is \emph{secure overlays}. Fidelius~\cite{Fidelius} is an example research system that follows this approach. In Fidelius, one device intercepts keyboard presses and signs them for the trusted application, while another device intercepts the HDMI output signal and modifies it with secure overlays of security-critical UIs such as payment web forms. 
 
-Fidelius addresses the above-mentioned problems but is still vulnerable to a different type of user input manipulation that we call \emph{early-submission attack}. This attack is possible because Fidelius only protects keyboard input, but not mouse. While this may seem only a functional limitation, it turns out that it is actually a security problem. Assume again that the intention of the user is to submit value ``10''. Once the user has typed ``1'', the untrusted OS or browser generates a fake mouse event that submits the web form. Mouse inputs could be disabled altogether, but such na\"ive solution hurts usability. Now we can state our last design principle.
+Fidelius addresses the above-mentioned problems but is still vulnerable to a different type of user input manipulation that we call \emph{early-submission attack}. This attack is possible because Fidelius only protects keyboard input, but not a mouse. While this may seem only a functional limitation, it turns out that it is a security problem. Assume again that the user intends to submit value ``10''. Once the user has typed ``1'', the untrusted OS or browser generates a fake mouse event that submits the web form. Mouse inputs could be disabled altogether, but such na\"ive solution hurts usability. Now we can state our last design principle.
 
 \begin{tcolorbox}
 \textbf{Principle 3:} All user input modalities must to be protected simultaneously.
@@ -89,7 +89,7 @@ Figure~\ref{fig:architecture} shows the overview of \protection system. The cent
 %     \label{fig:screenshot}
 % \end{figure}
 
-When the user visits a web page that contains a protected web form, the remote server sends a QR code to the untrusted browser, as shown in Figure~\ref{fig:screenshot} on the left. The QR code contains a specification of the protected web form signed by the server to prevent its modification in the browser. By using QR codes, we enable communication from the web server to the \hub device via an unmodified browser, which simplifies deployment significantly.
+When the user visits a web page that contains a protected web form, the remote server sends a QR code to the untrusted browser, as shown in Figure~\ref{fig:screenshot} on the left. The QR code contains a specification of the protected web form signed by the server to prevent its modification in the browser. By using QR codes, we enable communication from the webserver to the \hub device via an unmodified browser, which simplifies deployment significantly.
 
 By periodically examining the HDMI signal, \hub detects the QR code on the screen, decodes it, and verifies its signature. After that, as shown in Figure~\ref{fig:screenshot} in the middle, \hub renders the protected web form as an overlay on top of the HDMI frame that it receives from the untrusted OS. This step ensures that the security-critical UI elements are presented to the user correctly, and thus output integrity of the protected web form is preserved.
 
@@ -99,7 +99,7 @@ While the user interacts with the protected web form, \hub intercepts all input 
 
 If input confidentiality is needed, the user can be required to trigger a secure attention sequence (SAS), like \texttt{Ctr+Alt+Del}, before entering any secrets. The untrusted OS and the browser cannot observe sensitive data on the secure overlay since they are rendered by \hub and never accessible to them.
 
-Such design complies with our three design principles. Principle 1 is met, because the user only interacts with the main UI. Secure overlays support Principle 2, and mouse tracking combined with input trace signing ensures that all input modalities are protected (Principle 3).
+Such a design complies with our three design principles. Principle 1 is met because the user only interacts with the main UI. Secure overlays support Principle 2, and mouse tracking combined with input trace signing ensures that all input modalities are protected (Principle 3).
 
 % \begin{figure}[t]
 %     \centering
