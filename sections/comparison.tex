@@ -8,7 +8,7 @@ Integrated security chips like Titan and T2 are, obviously, limited to deploymen
 
 \proximitee is an example of a plug-and-play security token that can be attached to the target platform over a standard interface like USB. Deployment of security solutions is a feasible option for a larger set of service providers. For example, cloud computing providers can enhance off-the-shelf servers with \key tokens and communicate their public keys to their clients to support more secure attestation. Another interesting use case is the setup of a permissioned blockchain where every consensus node is hardened with SGX enclaves. The trusted authority that appoints the consensus nodes can issue a \key token to each organization that operates one node.
 
-Also, \protection could be deployed as a plug-and-play security module. Such deployment allows service providers like voting authorities and banks to increase the security of their services without restricting the users' choice of client platform. In medical and industrial domains, an externally-attached \protection module can improve the security of safety-critical systems, even when modifications to the computing platform itself are prohibited due to strict regulations. Alternatively, \protection could be deployed as an integrated security chip such that its functionality is implemented as part of the integrated keyboard, mouse, and display controllers. 
+Also \protection could be deployed as a plug-and-play security module. Such deployment allows service providers like voting authorities and banks to increase the security of their services without restricting the users' choice of client platform. In medical and industrial domains, an externally-attached \protection module can improve the security of safety-critical systems, even when modifications to the computing platform itself are prohibited due to strict regulations. Alternatively, \protection could be deployed as an integrated security chip such that its functionality is implemented as part of the integrated keyboard, mouse, and display controllers. 
 
 %\begin{figure}[t]
 %    \centering
@@ -29,7 +29,7 @@ Alternatively, \protection could be used to create a trusted path from the user 
 
 \paragraph{Dedicated chips and early TEEs}
 
-\update{5}{\protection and \proximitee are systems where a dedicated chip complements and improves the security guarantees of enclaves. Some previous TEE designs have leveraged dedicated security chips to implement a TEE that can be attested.}
+\update{5}{Some previous TEE designs have leveraged dedicated security chips to implement a TEE that can be attested.}
 
 \update{5}{AMD's Secure Virtual Machine technology is one such example where the TEE is created as follows: the CPU measure code in a specific memory region, enables DMA protections for that region, disables interrupts, records the measurement into a PCR register of a TPM chip, and finally begins executing the measured code. Essentially, this sequence of events provides a clean execution of the measured code without restarting the whole platform, and therefore this technique is often called ``late launch''. The main role of the dedicated chip (TPM in this case) is to securely record the code that was launched so that an external verifier can check its integrity using attestation.}
 
