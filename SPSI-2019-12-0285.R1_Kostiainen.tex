@@ -6,12 +6,9 @@
 \usepackage[T1]{fontenc}
 \usepackage{xcolor}
 \usepackage{graphicx,pifont}
-\usepackage{mathtools}
-\usepackage{mathrsfs}
-\usepackage{amssymb,amsmath,amsthm}
 \usepackage{xspace}
 \usepackage{url}
-\usepackage{tikz}\usepackage{hyperref}
+\usepackage{hyperref}
 \usepackage{color, colortbl}
 \usepackage{subcaption}
 \usepackage{tcolorbox}
@@ -98,6 +95,8 @@ Titan~\cite{titan} is a security chip implemented as a low-power microcontroller
 
  One of the main functionalities that Titan implements is \emph{secure boot}. When the server machine is powered up, Titan executes code, known as boot ROM, from its embedded read-only memory. This code is immutable and thus implicitly trusted. The boot ROM code loads Titan's firmware from the embedded flash and verifies its integrity using a digital signature. Once Titan's firmware is securely verified and running, it can verify the boot process of its host. Titan blocks PCH's access to the firmware flash until it has cryptographically verified the content of the flash, and then it releases the lock and allows the verified boot firmware to configure the machine and load the boot loader which subsequently verifies and loads the OS. Such an iterative process allows precise control over which system software is booted. 
 
+% Removed due to image permission
+%
 %\begin{figure}[t]
 %    \centering
 %    \includegraphics[trim={0 8.5cm 17cm 0} scale=0.7]{Kostiainen-Fig1.pdf}
@@ -209,12 +208,12 @@ When the user visits a web page that contains a protected web form, the remote s
 
 By periodically examining the HDMI signal, \hub detects the QR code on the screen, decodes it, and verifies its signature. After that, as shown in Figure~\ref{fig:screenshot} in the middle, \hub renders the protected web form as an overlay on top of the HDMI frame that it receives from the untrusted OS. This step ensures that the security-critical UI elements are presented to the user correctly, and thus output integrity of the protected web form is preserved.
 
-\begin{figure}    
+\begin{figure*}    
 	\centering
-	\includegraphics[trim={0 8cm 15cm 0}, clip, width=\linewidth]{Kostiainen-Fig2.pdf}
+	\includegraphics[trim={0 8cm 15cm 0}, clip, width=0.6\linewidth]{Kostiainen-Fig2.pdf}
 	\caption{\protection user interface.} 
     \label{fig:screenshot}
-\end{figure}
+\end{figure*}
 
 \hub tracks mouse movement events, and when the mouse pointer enters the secure overlay, as shown in Figure~\ref{fig:screenshot} on the right, \hub dims the rest of the screen to focus the user's attention to the secure overlay. Such protection is needed to prevent the user from following a possible fake mouse cursor, drawn by the untrusted browser or OS, elsewhere on the screen. Dimming parts of the screen have been shown to be an effective way to focus the user's attention to the correct cursor~\cite{huang2012clickjacking}.
 
@@ -405,18 +404,19 @@ S.~Volos {\em et~al.}, ``Graviton: Trusted execution environments on {GPUs},''
 \end{thebibliography}
 
 
+
 \section*{Author Bios}
 
-\begin{tcolorbox}
+%\begin{tcolorbox}
 
 \paragraph{Kari Kostiainen} is a Senior Scientist at ETH Zurich. His research interests include trusted computing, mobile security, secure user interaction and blockchain security. Dr. Kostiainen has a PhD degree from Aalto University. His contact address is \emph{kari.kostiainen@inf.ethz.ch}.
 
-\vspace{10pt}
+\vspace{5pt}
 \paragraph{Aritra Dhar} is a PhD Student at ETH Zurich. His research interests include secure user interaction, trusted computing, anonymous networks and program analysis. Mr. Dhar has a master's degree from IIIT Delhi. His contact address is \emph{aritra.dhar@inf.ethz.ch}.
 
-\vspace{10pt}
+\vspace{5pt}
 \paragraph{Srdjan Capkun} is a Full Professor at ETH Zurich. His research interests include wireless security, secure positioning, trusted computing and blockchain technologies. Prof. Capkun has a PhD degree from EPFL and he is an ACM Fellow. His contact address is \emph{srdjan.capkun@inf.ethz.ch}.
 
-\end{tcolorbox}
+%\end{tcolorbox}
 
 \end{document}
