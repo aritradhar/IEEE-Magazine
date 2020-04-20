@@ -98,12 +98,12 @@ Titan~\cite{titan} is a security chip implemented as a low-power microcontroller
 
  One of the main functionalities that Titan implements is \emph{secure boot}. When the server machine is powered up, Titan executes code, known as boot ROM, from its embedded read-only memory. This code is immutable and thus implicitly trusted. The boot ROM code loads Titan's firmware from the embedded flash and verifies its integrity using a digital signature. Once Titan's firmware is securely verified and running, it can verify the boot process of its host. Titan blocks PCH's access to the firmware flash until it has cryptographically verified the content of the flash, and then it releases the lock and allows the verified boot firmware to configure the machine and load the boot loader which subsequently verifies and loads the OS. Such an iterative process allows precise control over which system software is booted. 
 
-\begin{figure}[t]
-    \centering
-    \includegraphics[scale=0.7]{Kostiainen-Fig1.pdf}
-    \caption{Google Titan~\cite{titan} and Apple T2~\cite{t2} security chips.}
-\label{fig:prototype}   
-\end{figure}
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[trim={0 8.5cm 17cm 0} scale=0.7]{Kostiainen-Fig1.pdf}
+%    \caption{Google Titan~\cite{titan} and Apple T2~\cite{t2} security chips.}
+%\label{fig:prototype}   
+%\end{figure}
 
  
 \subsubsection*{Apple T2}
@@ -199,37 +199,22 @@ Given these principles, we designed a new trusted path system called \protection
 
 Figure~\ref{fig:architecture} shows the overview of \protection system. The central component of the solution is a low-complexity embedded device called \hub that intercepts key presses from a keyboard and movement events from a mouse, tracks mouse movements, and draws secure overlays. 
 
-
 \begin{figure}[t]
-    \begin{center}
-        \begin{subfigure}{0.4\textwidth}
-        \centering
-            \includegraphics[trim={0 8.5cm 17cm 0}, clip, width=\linewidth]{Kostiainen-Fig2a.pdf}
-             \caption{\protection system.}
-            \label{fig:architecture}    
-        \end{subfigure}
-    \end{center}
+	\centering
+	\includegraphics[trim={0 8.5cm 17cm 0}, clip, width=\linewidth]{Kostiainen-Fig1.pdf}	\caption{\protection system.}
+	\label{fig:architecture}    
+\end{figure}    
     
-    %\vspace{1em} 
-    
-    \begin{center}
-        \begin{subfigure}{0.5\textwidth}
-        \centering
-       \includegraphics[trim={0 8cm 15cm 0}, clip, width=0.9\linewidth]{Kostiainen-Fig2b.pdf}
-    	\caption{\protection user interface.} 
-        \label{fig:screenshot}
-    \end{subfigure}
-    \end{center}
-    
-    \vspace{-10pt}
-    \caption{\protection system.} 
-    \label{fig:protection}
-\end{figure}
-
-
 When the user visits a web page that contains a protected web form, the remote server sends a QR code to the untrusted browser, as shown in Figure~\ref{fig:screenshot} on the left. The QR code contains a specification of the protected web form signed by the server to prevent its modification in the browser. By using QR codes, we enable communication from the webserver to the \hub device via an unmodified browser, which simplifies deployment significantly.
 
 By periodically examining the HDMI signal, \hub detects the QR code on the screen, decodes it, and verifies its signature. After that, as shown in Figure~\ref{fig:screenshot} in the middle, \hub renders the protected web form as an overlay on top of the HDMI frame that it receives from the untrusted OS. This step ensures that the security-critical UI elements are presented to the user correctly, and thus output integrity of the protected web form is preserved.
+
+\begin{figure}    
+	\centering
+	\includegraphics[trim={0 8cm 15cm 0}, clip, width=\linewidth]{Kostiainen-Fig2.pdf}
+	\caption{\protection user interface.} 
+    \label{fig:screenshot}
+\end{figure}
 
 \hub tracks mouse movement events, and when the mouse pointer enters the secure overlay, as shown in Figure~\ref{fig:screenshot} on the right, \hub dims the rest of the screen to focus the user's attention to the secure overlay. Such protection is needed to prevent the user from following a possible fake mouse cursor, drawn by the untrusted browser or OS, elsewhere on the screen. Dimming parts of the screen have been shown to be an effective way to focus the user's attention to the correct cursor~\cite{huang2012clickjacking}.
 
@@ -420,7 +405,7 @@ S.~Volos {\em et~al.}, ``Graviton: Trusted execution environments on {GPUs},''
 \end{thebibliography}
 
 
-\section*{Author bios}
+\section*{Author Bios}
 
 \begin{tcolorbox}
 
