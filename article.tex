@@ -1,7 +1,39 @@
-\input{preamble}
+% Usenix template
+\documentclass[letterpaper,twocolumn,10pt]{article}
+\usepackage{usenix2019_v3}
+
+% packages
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+\usepackage{graphicx,pifont}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage{xspace}
+\usepackage{url}
+\usepackage{tikz}\usepackage{hyperref}
+\usepackage{color, colortbl}
+\usepackage{subcaption}
+\usepackage{tcolorbox}
+\usepackage[font={small}]{caption}
+
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png,.jpg}
+
+% macros
+\newcommand{\red}[1]{\textcolor{red}{#1}} 
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+\newcommand{\update}[2]{\textcolor{blue}{\textbf{(\##1)} #2}}
+
+\newcommand{\protection}{\textsf{ProtectIOn}\xspace}
+\newcommand{\hub}{\textsf{IOHub}\xspace}
+
+\newcommand{\proximitee}{\textsf{ProximiTEE}\xspace}
+\newcommand{\key}{\textsf{ProximiKey}\xspace}
+
 
 \graphicspath{{images/}}
 
+% title etc.
 \title{Dedicated Security Chips in the Age of Secure Enclaves} 
 
 \author{Kari Kostiainen, Aritra Dhar, Srdjan Capkun \\ ETH Zurich}
@@ -10,14 +42,17 @@
 \maketitle
 \thispagestyle{empty}
 
+% abstract
 \begin{abstract}
 \textbf{Secure enclave architectures have become prevalent in modern CPUs and enclaves provide a flexible way to implement various hardware-assisted security services. But special-purpose security chips can still have advantages. Interestingly, dedicated security chips can also assist enclaves and improve their security.}
 \end{abstract}
 
+% keywords
 \vspace{10pt}
 \noindent
 \textbf{Keywords ---} secure enclaves, security chips, trusted path, remote attestation, proximity verification
 
+% content
 \input{sections/intro}
 \input{sections/dedicated-chips}
 \input{sections/protectIOn}
@@ -25,11 +60,11 @@
 \input{sections/comparison}
 \input{sections/outlook}
 
-{\small
-\bibliographystyle{abbrv}
-\bibliography{references}}
- 
+% ordering by reference appearance
+\bibliographystyle{ieeetr} 
+\bibliography{references}
 
+% author bios 
 \input{sections/bios}
  
  
