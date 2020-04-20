@@ -1,6 +1,8 @@
+
 \section*{Dedicated Security Chips}
 
 Computing platform providers have recently added new security chips to their systems. We look at two examples.
+
 
 \subsubsection*{Google Titan}
 
@@ -25,15 +27,12 @@ Besides secure boot, T2 also provides other security features such as protecting
  
 \subsubsection*{Specific Security Objectives}
 
-%In SGX, enclaves are constructed by the untrusted OS. The construction process of the enclave --- that is, the sequence of setup instructions and their parameters --- is recorded by the CPU so that it can be later communicated to an external verifier using the built-in attestation mechanism. This ensures that secrets will be provisioned only to correctly constructed enclave, and the untrusted OS cannot access those secrets. Thus, SGX enclaves are protected from the OS, but they \emph{cannot exist without it}. 
-  
-Both Titan and T2 implement secure boot. Secure boot is also a good example of a security mechanism that is outside the security objectives of SGX.
+  Both Titan and T2 implement secure boot. Secure boot is also a good example of a security mechanism that is outside the security objectives of SGX.
 
 SGX was designed to provide a specific set of protections~\cite{mckeen2013}. These protections include detection of integrity violation of an enclave instance, confidentiality of enclave's data, isolation between enclaves, and enforcement that enclave's execution always starts from an authorized location. The overall  goal of these protections can be loosely summarized as enabling \emph{secure computation} on untrusted computing platforms. 
 
 Because the above-listed protections do not include OS integrity verification, platform providers have added dedicated security chips, like Titan and T2, to implement such functionality. Disconnecting the microphones from the main CPU is another example of a security feature that is not provided by enclaves. (As noted in Textbox 1, other TEEs like the ARM TrustZone architecture can accommodate a secure boot.) 
 
-%% ------------ %%
 
 \begin{figure}
     \begin{tcolorbox}
@@ -44,7 +43,6 @@ Because the above-listed protections do not include OS integrity verification, p
     \end{tcolorbox}
 \end{figure}  
 
-%% ------------ %%
 
 \subsubsection*{Security Weaknesses}
 
@@ -65,6 +63,6 @@ Obviously, the security services that can be implemented as dedicated security c
 
 Titan and T2 are integrated security chips that are permanently attached to the computing platform. Are there also use cases that would benefit from plug-and-play security tokens?
 
-In the rest of this article, we explore these questions by examining two examples from our recent research. Our first example is trusted path~\cite{protection}, %\red{\#R1 where we explore how dedicated security chips enable trusted path to untrusted platform} 
-and after that, we focus on platform identification and remote attestation~\cite{proximitee}. 
-%\red{that uses dedicated external hardware in order to harden the Intel SGX's remote attestation}.
+In the rest of this article, we explore these questions by examining two examples from our recent research. Our first example is trusted path~\cite{protection}, and after that, we focus on platform identification and remote attestation~\cite{proximitee}. 
+
+

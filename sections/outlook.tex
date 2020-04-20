@@ -6,6 +6,4 @@ Similar to the current enclave architectures that enhance CPUs with secure execu
 
 Our research on trusted path (the \protection system~\cite{protection}) highlights that I/O devices need secure communication with enclaves. Similarly, also other peripherals like GPS units and fingerprint sensors would benefit from secure communication with enclaves. Protected communication between TEEs and other platform components requires authentication, enclave identification and access control mechanisms. The ARM TrustZone architecture has limited support towards this direction. In TrustZone, hardware components like memory controllers can make coarse-grained access control decisions based on the CPU's execution mode~\cite{ekberg2014untapped}. 
 
-%However, this approach lacks the possibility of distinguishing one enclave from another. Such intra-platform communication is also not secure against simple physical attacks like bus tapping. 
-
 Extending this paradigm for more fine-grained access control and secure inter-component communication is one promising direction. We envision future computing platforms where enclaves, peripherals and special-purpose security chips can communicate and work together to provide a rich set of hardware-assisted platform security services.

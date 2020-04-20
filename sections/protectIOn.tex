@@ -6,10 +6,6 @@ Indeed, \emph{trusted path} --- a secure channel from the human user to a truste
 
 User input manipulation can have severe consequences. If a malicious OS modifies the user input that is provided to a financial enclave, the enclave can be tricked to perform unauthorized payments. If enclaves are used to implement hardened medical devices or industrial systems, user input modifications may cause serious safety and health risks. Also, any enclave that needs user passwords or similar credentials is difficult to implement securely.
 
-%The lack of protected user interaction means that enclaves do not support \emph{trusted path} --- a secure channel from the human user to a trusted application. 
-
-%Depending on the application scenario, two different types of trusted paths may be desirable. The first, and more common, the definition of a trusted path is a secure communication channel between the human user and a \emph{local} trusted application like an enclave. The second, and perhaps less common, the definition of the trusted path is one that realizes a secure communication channel between the user and the \emph{remote} server without using any trusted local application in between. 
-
 
 \subsubsection*{Design Principles}
 
@@ -23,7 +19,8 @@ This approach has two main problems. The first is the fact that the user now has
 \textbf{Principle 1:} Out-of-context security confirmations have a high cognitive load and risk of user habituation. Thus, user interaction should be protected in the context of the normal user interface.
 \end{tcolorbox}
 
-The next approach that we examine is \emph{input signing}~\cite{IntegriKey}. Here, the main idea is to use a simple hardware device that sits \emph{in-between} a user input device, such as a keyboard, and the untrusted computing platform. The device intercepts every keypress, or similar user input event, and sends a signed trace of them to the trusted application. %(Such technique is sometimes also referred to as ``bump-in-the-wire''.)%~\cite{McCPerRei2006}.) 
+The next approach that we examine is \emph{input signing}~\cite{IntegriKey}. Here, the main idea is to use a simple hardware device that sits \emph{in-between} a user input device, such as a keyboard, and the untrusted computing platform. The device intercepts every keypress, or similar user input event, and sends a signed trace of them to the trusted application. 
+%~\cite{McCPerRei2006}.
 
 Input signing conforms to our first principle because the user does not have to interact outside the main UI. However, such solutions are vulnerable to attacks, where the adversary manipulates the user's input by showing false information on the output channel. That is, output manipulation leads to user input integrity violation. One example is a \emph{fake-typo} attack. Assume that the user types in value ``10'', but the adversary shows ``1'' on the screen. The user is likely to think that he mistyped and press ``0'' again. As a result, a signed trace of ``100'' will be sent to the trusted application. This simple attack leads us to our next design principle.
 
@@ -63,7 +60,7 @@ Figure~\ref{fig:architecture} shows the overview of \protection system. The cent
         \begin{subfigure}{0.5\textwidth}
         \centering
        \includegraphics[trim={0 8cm 15cm 0}, clip, width=0.9\linewidth]{overlayScreenShot_new.pdf}
-    \caption{\protection user interface.} %On the left, is shown the view of the attacker, where he sees the QR code that contains the signed UI specification. In the middle, is shown what the user sees after \hub overlays security-sensitive UIs. \textbf{(c)} On the right, is illustrated how \protection focuses user's attention when the user enters the overlaid UI with her mouse.}
+    	\caption{\protection user interface.} 
         \label{fig:screenshot}
     \end{subfigure}
     \end{center}
@@ -73,21 +70,6 @@ Figure~\ref{fig:architecture} shows the overview of \protection system. The cent
     \label{fig:protection}
 \end{figure}
 
-
-% 
-% \begin{figure}[t]
-%     \centering
-%     \includegraphics[trim={0 8.5cm 17cm 0}, clip, width=0.9\linewidth]{approachOverview.pdf}
-%     \caption{\protection system overview.}
-%     \label{fig:architecture}
-% \end{figure}
-% 
-% \begin{figure}[t]
-%     \centering
-%     \includegraphics[trim={0 8cm 15cm 0}, clip, width=\linewidth]{overlayScreenShot_new.pdf}
-%     \caption{\protection user interface. \textbf{(a)} On the left, is shown the view of the attacker, where he sees the QR code that contains the signed UI specification. \textbf{(b)} In the middle, is shown what the user sees after \hub overlays security-sensitive UIs. \textbf{(c)} On the right, is illustrated how \protection focuses user's attention when the user enters the overlaid UI with her mouse.}
-%     \label{fig:screenshot}
-% \end{figure}
 
 When the user visits a web page that contains a protected web form, the remote server sends a QR code to the untrusted browser, as shown in Figure~\ref{fig:screenshot} on the left. The QR code contains a specification of the protected web form signed by the server to prevent its modification in the browser. By using QR codes, we enable communication from the webserver to the \hub device via an unmodified browser, which simplifies deployment significantly.
 
@@ -100,18 +82,8 @@ While the user interacts with the protected web form, \hub intercepts all input 
 If input confidentiality is needed, the user can be required to trigger a secure attention sequence (SAS), like \texttt{Ctr+Alt+Del}, before entering any secrets. The untrusted OS and the browser cannot observe sensitive data on the secure overlay since they are rendered by \hub and never accessible to them.
 
 Such a design complies with our three design principles. Principle 1 is met because the user only interacts with the main UI. Secure overlays support Principle 2, and mouse tracking combined with input trace signing ensures that all input modalities are protected (Principle 3).
-
-% \begin{figure}[t]
-%     \centering
-%     \includegraphics[trim={0 6.6cm 21.5cm 0}, clip, scale=0.5]{setUp_1.pdf}
-%     \caption{\protection prototype.}
-% \label{fig:prototype}   
-% \end{figure}
-
-
+
 \paragraph{\protection prototype} 
-%\subsubsection*{\protection Prototype}
+
 We implemented a prototype of the \hub device as a combination of Raspberry Pi and Arduino boards and a simple HDMI interceptor. Our prototype shows that proposed functionalities are feasible to implement with small TCB on low-cost hardware. Full details of the \protection system are explained in our recent paper~\cite{protection}.
 
-
-%The delay in forwarding keystrokes is $170\ \mu s$ and for frames is $21.76\ ms$. This allows the \protection to achieve the maximum display frame rate of $47.69$ per second (e.g., most of the movies are shot and shown in  ~24-30 fps).

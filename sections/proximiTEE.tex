@@ -5,62 +5,19 @@ Remote attestation is a key feature of enclave architectures like SGX. In remote
 
 Remote attestation process allows remote verifiers to detect enclave integrity violations before provisioning secrets to them or before accepting signed messages from them.  
 
+
 \subsubsection*{Relay Attacks}
 
 The above outlined remote attestation protocol is a useful security mechanism, but it also has a well-known problem. 
 An adversary that controls the OS on the attested platform can easily \emph{redirect} the attestation challenge to another platform that computes the response. 
 The verifier cannot notice such \emph{relay attacks}, since the SGX attestation mechanism is based on a group signature scheme, and all processors from the same group produce indistinguishable signatures. (Even if attestation used traditional digital signatures, it would be very difficult in practice for the verifier to know which signing key corresponds to which CPU.) In other words, SGX guarantees detection of enclave's integrity violation, but  identification of the computing platform in which the attested enclave is running is not part of its security objectives.
 
-%\red{\#R2 note that in this article, we use Intel SGX to demonstrate relay. However, other TEEs such as ARM TrustZone, RISC-V keystone, etc. do not provide any means for platform identification, hence, vulnerable to relay.}
-
 Relay attacks have been known for a long time. Parno identified them in the context of TPM attestation over a decade ago and called them ``cuckoo attacks''~\cite{parno2008bootstrapping}. However, the full implications of relay attacks have not been well understood. Since attestation can only be redirected to another legitimate processor that executes exactly the same attested enclave code, it may appear that such relay attacks do not have noteworthy negative implications. Our analysis shows that such a belief is misguided.
 
-%\red{\#R1 The relay attack may seem like a bug in the existing TEEs. On the contrary, platform identification is an additional security property of the attestation that can not be provided by the enclaves itself. Without external hardware, mitigating the relay attack is not possible. Hence, the TEEs do not offer such property.}
-
-%\begin{figure}[t]
-%\footnotesize
-%    \centering
-%    \begin{tikzpicture}[
-%solved/.style={rectangle,draw,fill=purple!40, rounded corners, align=center},
-%not/.style={rectangle, draw,fill=orange!60, rounded corners, align=center},
-%neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5},
-%sibling distance=12em]]
-%    \node[neutral](root) {SGX attacks}
-%    child { node[not, yshift=13pt] (name) {Attacks enabled by \\ leaked attestation keys ~\cite{van2018foreshadow}} }
-%    child { node[neutral, yshift=13pt] (app) {Side-Channels \\ on application enclave}
-%      child { node[neutral, yshift=12pt] (soft) {Software/digital}
-%        child { node[solved, yshift=-4pt] (pe) {Privilege\\ escalation}}      
-%        child { node[not, right=1.5em of pe] (a) {Complement of Case (A)}}
-%        child { node[solved, right=1.5em of a, yshift=-10pt] {Case (A):\\
-%                Target platform: secure\\
-%                Attacker's platform: vulnerable}}}
-%      child { node[solved, yshift=12pt] (physical) {Physical} } };
-%      
-%    %\node[below=0cm of name] {Foreshadow~\cite{foreshadow-usenix18}};
-%    \node[below=0cm of physical](power) {Power analysis}; %~\cite{wang2006covert}};
-%    \node[below=-5pt of power](EM) {EM radiation}; %~\cite{gandolfi2001electromagnetic}};
-%    \node[below=-5pt of EM](ac) {Acoustic}; %~\cite{shamir2004acoustic}};
-%         
-%    \node[left=10pt of soft](page) {Page fault}; %~\cite{xu2015controlled}};
-%    \node[above=-3pt of page](cache) {Cache}; %~\cite{dall2018cachequote}};
-%    \node[below=-2pt of page](branch) {Branch prediction}; %~\cite{lee2017inferring}};
-%    %\node[below=-5pt of branch](synch) {Synchronization~\cite{asyncshock}};
-%      
-%    \node[solved, right=4em of root,  minimum size=3mm](l1) {};
-%    \node[right=0cm of l1](l1_1) {Enabled by relay};
-%    \node[not, below=1pt of l1, minimum size=3mm](l2) {};
-%    \node[right=0cm of l2](l2_1) {Independent of relay};
-%    
-%    \end{tikzpicture}
-%    
-%    \caption{Relay attack implications. Classification of attacks that are enabled by relaying and independent of relaying.}
-%    \label{fig:relayTree}
-%\end{figure}            
 
 \paragraph{Relay attack implications}
-Many computer systems, like servers at data centers, use multiple layers of protection. These protections may include using TEEs to protect certain applications, but also other defenses such as running software components at different privilege levels, physically protecting access to the computing platform, and frequent patching of discovered vulnerabilities. The main implication of relay attacks is that they \emph{increase} the adversary's ability to attack the attested enclave by circumventing many such protections.
 
-%Figure~\ref{fig:relayTree} shows a classification tree of the types of attacks that are made possible by relaying the attestation (and ones that are independent of relaying). 
+Many computer systems, like servers at data centers, use multiple layers of protection. These protections may include using TEEs to protect certain applications, but also other defenses such as running software components at different privilege levels, physically protecting access to the computing platform, and frequent patching of discovered vulnerabilities. The main implication of relay attacks is that they \emph{increase} the adversary's ability to attack the attested enclave by circumventing many such protections.
 
 Our first observation is that by redirecting the attestation to the adversary's platform, the adversary enables \emph{physical} side-channel attacks such as acoustic, electric, and electromagnetic monitoring which otherwise would not be possible to mount on the victim's platform. Such side channels have been shown to be effective and inexpensive means to extract secrets~\cite{genkin2016physical} and hardening enclaves against all possible physical side channels is difficult. 
 
@@ -86,23 +43,13 @@ Proximity verification using an external device overcomes the above listed main 
 
 Although the idea of proximity verification sounds simple to realize, the research efforts that followed failed to implement secure proximity verification. The main reason for the failure was that TPM, the secure element commonly available at the time, supported only fixed identification operations like digital signatures. TPM signatures may take up to one second, which allows the redirected attestation request to travel a long distance, and thus TPMs were simply too slow for secure proximity verification. %~\cite{CatchingCuckoo}.
 
-Because SGX enclaves are programmable, it is possible to implement proximity verification protocols that leverage simple operations like \texttt{XOR} that enable fast challenge-response rounds. Based on this observation, we designed a hardened SGX attestation scheme, called \proximitee~\cite{proximitee}. %, that is illustrated in Figure~\ref{fig:proximitee}. 
+Because SGX enclaves are programmable, it is possible to implement proximity verification protocols that leverage simple operations like \texttt{XOR} that enable fast challenge-response rounds. Based on this observation, we designed a hardened SGX attestation scheme, called \proximitee~\cite{proximitee}. 
 
 Our solution uses a simple embedded device called \key that is attached to the target platform over a local communication interface like USB. In hardened remote attestation, the verifier first establishes a secure channel a \key whose public key the verifier learns from its issuer. \key performs standard remote attestation on the local enclave, establishes a secure TLS channel to it, and verifies its proximity using a simple distance-bounding protocol that consists of repeated and fast challenge-response rounds. If such proximity verification succeeds, \key facilitates the creation of a secure channel between the remote verifier and the attested enclave. 
+
+\paragraph{Proximity verification security} 
 
-
-%\begin{figure}[t]
-% \centering
-%  \includegraphics[trim={0 8.7cm 13.2cm 0},clip,width=\linewidth]{proximiteeMain.pdf}
-% \caption{\proximitee system. The remote verifier establishes a secure channel to the \key device that first attests the enclave and then verifies its proximity.}
-% \label{fig:proximitee}
-%\end{figure}
-
-%The \proximitee attestation protocol that proceeds as shown in Figure~\ref{fig:proximitee}: \one The remote verifier establishes a secure channel (e.g., a TLS connection) to \key based on a device certificate that it learned from its issuer. \two The enclave is started, and \three the \key device performs the standard remote attestation to verify the code configuration of the enclave, and in the process, it learns the public key of the attested enclave. \four The \key device establishes a secure channel to the enclave using that public key. 
-
-%\five \key performs a distance-bounding protocol that consists of several rounds. At the beginning of each round, \key generates a random challenge and sends it to the enclave over the TLS channel. \six The enclave increments the received challenge by one and \seven sends the response back to the \key that \eight verifies that the response value is as expected and checks if the latency of the response is below a threshold. Successful proximity verification requires that the latency is below a specific threshold for sufficiently many responses. \nine  If proximity verification is successful, the \key notifies the remote verifier who can now establish a secure channel to the verified enclave.
-
-\paragraph{Proximity verification security} While the above design is mostly straightforward, the more interesting aspect is whether such a system prevents relay attacks in practice. To answer this question, we implemented our solution using a USB prototyping board and simulated a strong attack scenario where the adversary performs a relay to another SGX platform that is connected to the target platform over a one-meter long Ethernet wire. We also assumed that the adversary is able to perform all protocol computation instantaneously. 
+While the above design is mostly straightforward, the more interesting aspect is whether such a system prevents relay attacks in practice. To answer this question, we implemented our solution using a USB prototyping board and simulated a strong attack scenario where the adversary performs a relay to another SGX platform that is connected to the target platform over a one-meter long Ethernet wire. We also assumed that the adversary is able to perform all protocol computation instantaneously. 
 
 \begin{figure}[t]
   \centering
@@ -115,9 +62,4 @@ Our solution uses a simple embedded device called \key that is attached to the t
 Figure~\ref{graph:histogram} shows the results from our experiments, where we measured both the legitimate and relayed challenge-response latencies. The vast majority of the benign latencies range from $145$ to $250 \mu s$, while the attack round-trips take from $200$ to $750$ $\mu s$. The average delay of our adversary is only $80 \mu s$. (To put this into perspective, even the highly-optimized network connections between major data centers in the same region exhibit latencies from one millisecond upwards.) 
 
 As can be seen from Figure~\ref{graph:histogram}, these two latency distributions are distinguishable. Our analysis confirms that it is possible to set protocol parameters (number of challenge-response rounds, latency threshold, etc.) such that very fast relay attacks can be detected with high probability and legitimate attestations fail only with negligible probability. The full details of the \proximitee system and our analysis can be found from our recent paper~\cite{proximitee}.
-
-%We simulate a powerful relay-attack adversary that is connected to the target platform with a fast network connection. To consider the best case for the adversary, we make several assumptions in his favor. For example, we assume that he can instantly perform all computations needed to participate in the proximity verification protocol. However, he cannot break cryptographic hardness assumptions. We define the adversary's success as the event in which proximity verification succeeds with an enclave that resides on the attacker's platform and denotes the probability of such event $P_{adv}$. We define legitimate success as the event in which proximity verification succeeds with an enclave that resides in the target platform and denotes its probability $P_{legit}$. We saw that it is possible to find parameters ($n=50$, $k=0.3$ and \proximitee$=186 \mu s$) that make proximity verification very secure ($P_{adv}=3.55\times 10^{-34}$) and reliable ($P_{legit}=0.999999977$).
-
-
-
 

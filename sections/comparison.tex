@@ -10,21 +10,13 @@ Integrated security chips like Titan and T2 are, obviously, limited to deploymen
 
 Also \protection could be deployed as a plug-and-play security module. Such deployment allows service providers like voting authorities and banks to increase the security of their services without restricting the users' choice of client platform. In medical and industrial domains, an externally-attached \protection module can improve the security of safety-critical systems, even when modifications to the computing platform itself are prohibited due to strict regulations. Alternatively, \protection could be deployed as an integrated security chip such that its functionality is implemented as part of the integrated keyboard, mouse, and display controllers. 
 
-%\begin{figure}[t]
-%    \centering
-%    \includegraphics[scale=0.4]{comparison.pdf}
-%    \caption{Comparison of \protection and \proximitee with respect to the platform-integrated security chips, user-pluggable security tokens and CPU-implemented enclave architecture.}
-%\label{fig:prototype}   
-%\end{figure}
 
 \paragraph{Security benefits}
 Titan and T2 are chips that enable security functionality like a secure boot that is not provided by enclaves. Thus, the operation of Titan and T2 is largely orthogonal to the operation of enclaves. 
 
 In comparison, \proximitee is a security chip that is designed to work in collaboration with enclaves and improve their security guarantees by enabling secure TEE identification for hardened remote attestation. 
 
-\protection is a solution that can either assist enclaves or operate independently of them. One possible usage for \protection is to enable a trusted path from the user to a local enclave, which can communicate securely with remote servers. In such a deployment, \protection works together with an enclave. 
-%
-Alternatively, \protection could be used to create a trusted path from the user to a remote server without the use of enclaves. Such deployment is beneficial when the risk of microarchitectural attacks on enclaves is considered too high, for example.
+\protection is a solution that can either assist enclaves or operate independently of them. One possible usage for \protection is to enable a trusted path from the user to a local enclave, which can communicate securely with remote servers. In such a deployment, \protection works together with an enclave. Alternatively, \protection could be used to create a trusted path from the user to a remote server without the use of enclaves. Such deployment is beneficial when the risk of microarchitectural attacks on enclaves is considered too high, for example.
 
 
 \paragraph{Dedicated chips and early TEEs}
