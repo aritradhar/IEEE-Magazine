@@ -1,41 +1,59 @@
-% Usenix template
-\documentclass[letterpaper,twocolumn,10pt]{article}
-\usepackage{usenix2019_v3}
 
-% packages
+% two-column style
+\documentclass[letterpaper,twocolumn,10pt]{article}
+
+% appearance
+\usepackage[kerning,spacing]{microtype} 
+\usepackage{mathptmx}
+\usepackage{flushend}
+
+% margins
+\setlength{\textheight}{9.0in}
+\setlength{\columnsep}{0.33in}
+\setlength{\textwidth}{7.00in}
+\setlength{\topmargin}{0.0in}
+\setlength{\headheight}{0.0in}
+\setlength{\headsep}{0.0in}
+\addtolength{\oddsidemargin}{-0.25in}
+\addtolength{\evensidemargin}{-0.25in}
+
+% more packages
 \usepackage[T1]{fontenc}
 \usepackage{xcolor}
 \usepackage{graphicx,pifont}
 \usepackage{xspace}
 \usepackage{url}
-\usepackage{hyperref}
-\usepackage{color, colortbl}
-\usepackage{subcaption}
+\usepackage[]{hyperref}
 \usepackage{tcolorbox}
 \usepackage[font={small}]{caption}
 
+% link colors
+\hypersetup{                 
+  colorlinks,
+  linkcolor={green!80!black},
+  citecolor={red!70!black},
+  urlcolor={blue!70!black}
+}
+
+% images
+\graphicspath{{images/}}
 \DeclareGraphicsExtensions{.pdf,.jpeg,.png,.jpg}
 
 % macros
-\newcommand{\red}[1]{\textcolor{red}{#1}} 
-\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
-\newcommand{\update}[2]{\textcolor{blue}{\textbf{(\##1)} #2}}
-
 \newcommand{\protection}{\textsf{ProtectIOn}\xspace}
 \newcommand{\hub}{\textsf{IOHub}\xspace}
-
 \newcommand{\proximitee}{\textsf{ProximiTEE}\xspace}
 \newcommand{\key}{\textsf{ProximiKey}\xspace}
 
 
-\graphicspath{{images/}}
+%%=================================%%
 
-% title etc.
+% title
 \title{Dedicated Security Chips in the Age of Secure Enclaves} 
-
 \author{Kari Kostiainen, Aritra Dhar, Srdjan Capkun \\ ETH Zurich}
 
 \begin{document}
+\date{}
 \maketitle
 \thispagestyle{empty}
 
@@ -49,28 +67,15 @@
 \noindent
 \textbf{Keywords ---} secure enclaves, security chips, trusted path, remote attestation, proximity verification
 
-% content
-%\input{sections/intro}
-%\input{sections/dedicated-chips}
-%\input{sections/protectIOn}
-%\input{sections/proximiTEE}
-%\input{sections/comparison}
-%\input{sections/outlook}
 
-% ordering by reference appearance
-%\bibliographystyle{ieeetr} 
-%\bibliography{references}
+%%=================================%%
 
-% author bios 
-%\input{sections/bios}
-
-
-%\section*{}
-\vspace{10pt}
+% article body starts
+\vspace{20pt}
 
 Trusted Computing Base (TCB) minimization is one of the most fundamental computer security principles. The main idea is to reduce the amount of software and hardware that needs to be trusted for the secure operation of a particular application. A common technique to achieve TCB minimization is to run the application inside a Trusted Execution Environment (TEE). The TEE protects the application's execution, despite any other compromised software on the same system.
 
-One TEE implementation approach that has gained significant popularity recently is to realize the TEE by enhancing the main CPU of the computing platform with new features like special instructions and access control checks. Intel's SGX, designed for the x86 architecture, is a prime example of such TEE. In SGX, the CPU ensures that no other process can access the memory of the protected application that is called an \emph{enclave}. By doing this, SGX guarantees that enclaves enjoy execution integrity, and their data remains confidential.  
+One TEE implementation approach that has gained significant popularity recently is to realize the TEE by enhancing the main CPU of the computing platform with new features like special instructions and access control checks. Intel's SGX, designed for the x86 architecture, is a prime example of such TEE. In SGX the CPU ensures that no other process can access the memory of the protected application that is called an \emph{enclave}. By doing this, SGX guarantees that enclaves enjoy execution integrity and their data remains confidential.  
 
 Several other TEE designs exist too. ARM TrustZone is a popular TEE architecture that is used in many commercial mobile devices, while Sanctum~\cite{sanctum} serves as a good example of a research TEE system. For simplicity, we focus on Intel's SGX and use it as a case study to discuss the strengths and limitations of enclaves.
 
@@ -84,6 +89,9 @@ At first glance, these two trends seem almost contradictory. If enclaves enable 
 
 In this article, we discuss the rationale behind this trend. We explain the benefits of dedicated security chips and outline two of our research projects where we designed such. These projects showcase an interesting new pattern --- one where special-purpose security chips assist enclaves and thus improve their security.
 
+
+%%=================================%%
+
 \section*{Dedicated Security Chips}
 
 Computing platform providers have recently added new security chips to their systems. We look at two examples.
@@ -94,15 +102,6 @@ Computing platform providers have recently added new security chips to their sys
 Titan~\cite{titan} is a security chip implemented as a low-power microcontroller on Google's purpose-built server platforms. The Titan chip communicates with the main CPU via the Serial Peripheral Interface (SPI), and it interposes between the boot firmware flash and the Platform Controller Hub (PCH).
 
  One of the main functionalities that Titan implements is \emph{secure boot}. When the server machine is powered up, Titan executes code, known as boot ROM, from its embedded read-only memory. This code is immutable and thus implicitly trusted. The boot ROM code loads Titan's firmware from the embedded flash and verifies its integrity using a digital signature. Once Titan's firmware is securely verified and running, it can verify the boot process of its host. Titan blocks PCH's access to the firmware flash until it has cryptographically verified the content of the flash, and then it releases the lock and allows the verified boot firmware to configure the machine and load the boot loader which subsequently verifies and loads the OS. Such an iterative process allows precise control over which system software is booted. 
-
-% Removed due to image permission
-%
-%\begin{figure}[t]
-%    \centering
-%    \includegraphics[trim={0 8.5cm 17cm 0} scale=0.7]{Kostiainen-Fig1.pdf}
-%    \caption{Google Titan~\cite{titan} and Apple T2~\cite{t2} security chips.}
-%\label{fig:prototype}   
-%\end{figure}
 
  
 \subsubsection*{Apple T2}
@@ -118,7 +117,7 @@ Besides secure boot, T2 also provides other security features such as protecting
 
 SGX was designed to provide a specific set of protections~\cite{mckeen2013}. These protections include detection of integrity violation of an enclave instance, confidentiality of enclave's data, isolation between enclaves, and enforcement that enclave's execution always starts from an authorized location. The overall  goal of these protections can be loosely summarized as enabling \emph{secure computation} on untrusted computing platforms. 
 
-Because the above-listed protections do not include OS integrity verification, platform providers have added dedicated security chips, like Titan and T2, to implement such functionality. Disconnecting the microphones from the main CPU is another example of a security feature that is not provided by enclaves. (As noted in Textbox 1, other TEEs like the ARM TrustZone architecture can accommodate a secure boot.) 
+Because the above-listed protections do not include OS integrity verification, platform providers have added dedicated security chips, like Titan and T2, to implement such functionality. Disconnecting the microphones from the main CPU is another example of a security feature that is not provided by enclaves. (As noted in Textbox 1, other TEEs like the ARM TrustZone architecture can accommodate secure boot.) 
 
 
 \begin{figure}
@@ -153,6 +152,7 @@ Titan and T2 are integrated security chips that are permanently attached to the 
 In the rest of this article, we explore these questions by examining two examples from our recent research. Our first example is trusted path~\cite{protection}, and after that, we focus on platform identification and remote attestation~\cite{proximitee}. 
 
 
+%%=================================%%
 
 \section*{Trusted Path}
 
@@ -175,7 +175,6 @@ This approach has two main problems. The first is the fact that the user now has
 \end{tcolorbox}
 
 The next approach that we examine is \emph{input signing}~\cite{IntegriKey}. Here, the main idea is to use a simple hardware device that sits \emph{in-between} a user input device, such as a keyboard, and the untrusted computing platform. The device intercepts every keypress, or similar user input event, and sends a signed trace of them to the trusted application. 
-%~\cite{McCPerRei2006}.
 
 Input signing conforms to our first principle because the user does not have to interact outside the main UI. However, such solutions are vulnerable to attacks, where the adversary manipulates the user's input by showing false information on the output channel. That is, output manipulation leads to user input integrity violation. One example is a \emph{fake-typo} attack. Assume that the user types in value ``10'', but the adversary shows ``1'' on the screen. The user is likely to think that he mistyped and press ``0'' again. As a result, a signed trace of ``100'' will be sent to the trusted application. This simple attack leads us to our next design principle.
 
@@ -227,6 +226,8 @@ Such a design complies with our three design principles. Principle 1 is met beca
 
 We implemented a prototype of the \hub device as a combination of Raspberry Pi and Arduino boards and a simple HDMI interceptor. Our prototype shows that proposed functionalities are feasible to implement with small TCB on low-cost hardware. Full details of the \protection system are explained in our recent paper~\cite{protection}.
 
+
+%%=================================%%
 
 \section*{Attestation and Platform Identification}
 
@@ -293,6 +294,8 @@ Figure~\ref{graph:histogram} shows the results from our experiments, where we me
 As can be seen from Figure~\ref{graph:histogram}, these two latency distributions are distinguishable. Our analysis confirms that it is possible to set protocol parameters (number of challenge-response rounds, latency threshold, etc.) such that very fast relay attacks can be detected with high probability and legitimate attestations fail only with negligible probability. The full details of the \proximitee system and our analysis can be found from our recent paper~\cite{proximitee}.
 
 
+%%=================================%%
+
 \section*{Discussion}
 
 Now that we have seen two commercial, integrated security chips (Titan and T2) and two user-attachable, research tokens (\protection and \proximitee), we can discuss their deployment aspects, security benefits, and previous comparable solutions. 
@@ -320,6 +323,8 @@ Some previous TEE designs have leveraged dedicated security chips to implement a
 AMD's Secure Virtual Machine technology is one such example where the TEE is created as follows: the CPU measure code in a specific memory region, enables DMA protections for that region, disables interrupts, records the measurement into a PCR register of a TPM chip, and finally begins executing the measured code. Essentially, this sequence of events provides a clean execution of the measured code without restarting the whole platform, and therefore this technique is often called ``late launch''. The main role of the dedicated chip (TPM in this case) is to securely record the code that was launched so that an external verifier can check its integrity using attestation.
 
 
+%%=================================%%
+
 \section*{Outlook}
 
 Future computing platforms are likely to combine various computing units like CPUs, GPUs, TPUs, FPGAs and more. 
@@ -328,6 +333,9 @@ Similar to the current enclave architectures that enhance CPUs with secure execu
 Our research on trusted path (the \protection system~\cite{protection}) highlights that I/O devices need secure communication with enclaves. Similarly, also other peripherals like GPS units and fingerprint sensors would benefit from secure communication with enclaves. Protected communication between TEEs and other platform components requires authentication, enclave identification and access control mechanisms. The ARM TrustZone architecture has limited support towards this direction. In TrustZone, hardware components like memory controllers can make coarse-grained access control decisions based on the CPU's execution mode~\cite{ekberg2014untapped}. 
 
 Extending this paradigm for more fine-grained access control and secure inter-component communication is one promising direction. We envision future computing platforms where enclaves, peripherals and special-purpose security chips can communicate and work together to provide a rich set of hardware-assisted platform security services.
+
+
+%%=================================%%
 
 % references
 \begin{thebibliography}{10}
@@ -404,19 +412,17 @@ S.~Volos {\em et~al.}, ``Graviton: Trusted execution environments on {GPUs},''
 \end{thebibliography}
 
 
+%%=================================%%
 
 \section*{Author Bios}
 
-%\begin{tcolorbox}
-
 \paragraph{Kari Kostiainen} is a Senior Scientist at ETH Zurich. His research interests include trusted computing, mobile security, secure user interaction and blockchain security. Dr. Kostiainen has a PhD degree from Aalto University. His contact address is \emph{kari.kostiainen@inf.ethz.ch}.
 
-\vspace{5pt}
 \paragraph{Aritra Dhar} is a PhD Student at ETH Zurich. His research interests include secure user interaction, trusted computing, anonymous networks and program analysis. Mr. Dhar has a master's degree from IIIT Delhi. His contact address is \emph{aritra.dhar@inf.ethz.ch}.
 
-\vspace{5pt}
 \paragraph{Srdjan Capkun} is a Full Professor at ETH Zurich. His research interests include wireless security, secure positioning, trusted computing and blockchain technologies. Prof. Capkun has a PhD degree from EPFL and he is an ACM Fellow. His contact address is \emph{srdjan.capkun@inf.ethz.ch}.
 
-%\end{tcolorbox}
+
+%%=================================%%
 
 \end{document}
